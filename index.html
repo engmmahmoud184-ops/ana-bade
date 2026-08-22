@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#146b4a">
+  <meta name="description" content="اعثر بسرعة على الخدمات المحلية في بلدتك في لبنان.">
+  <title>أنا بدي | Ana Bade</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="أنا بدي - الصفحة الرئيسية">
+        <span class="brand-mark" aria-hidden="true">أ</span>
+        <span class="brand-name">أنا بدي <small lang="en">Ana Bade</small></span>
+      </a>
+      <div class="header-actions"><span class="header-note">كل خدمة ببلدتك</span><a class="header-cta" href="add-service.html">أضف خدمتك</a></div>
+    </header>
+
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">دليلك للخدمات المحلية في لبنان</p>
+        <h1 id="page-title">شو بدّك<br><em>ببلدتك؟</em></h1>
+        <p class="intro">اختار منطقتك، ومنوصّلك بسرعة للشخص أو المحل أو الخدمة اللي عم تدوّر عليها.</p>
+      </div>
+      <div class="hero-stamp" aria-hidden="true"><span>قريب</span><strong>وسريع</strong></div>
+    </section>
+
+    <section class="directory-panel" aria-labelledby="regions-title">
+      <div class="panel-heading">
+          <div><p class="step">الخطوة ١ من ٥</p><h2 id="regions-title">اختار المنطقة</h2></div>
+        <p>سنظهر لك البلدات التابعة إلها بالخطوة التالية.</p>
+      </div>
+      <div id="regions" class="region-grid" aria-live="polite" aria-busy="true">
+        <span class="skeleton"></span><span class="skeleton"></span><span class="skeleton"></span>
+        <span class="skeleton"></span><span class="skeleton"></span><span class="skeleton"></span>
+      </div>
+    </section>
+
+    <footer class="legal-footer"><span>أنا بدي · الإصدار 3.4 · <a href="admin.html">الإدارة</a></span><nav><a href="privacy.html">الخصوصية</a><a href="terms.html">الشروط</a><a href="disclaimer.html">إخلاء المسؤولية</a><a href="contact.html">التواصل</a></nav></footer>
+  </main>
+  <script type="module" src="js/home.js"></script>
+</body>
+</html>
