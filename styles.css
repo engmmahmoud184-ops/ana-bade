@@ -7,7 +7,7 @@ button,input { font:inherit; }
 .site-shell { width:min(100% - 2rem,72rem); min-height:100vh; margin-inline:auto; display:flex; flex-direction:column; }
 .site-header { min-height:6rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; border-bottom:1px solid var(--line); }
 .brand { display:inline-flex; align-items:center; gap:.75rem; text-decoration:none; }
-.brand-mark { width:4.2rem; height:4.2rem; display:grid; place-items:center; overflow:hidden; color:transparent; background:white url("../assets/ana-bade-logo.jpeg") center/contain no-repeat; border:1px solid var(--line); border-radius:.85rem; font-size:0; box-shadow:0 .25rem .8rem rgba(17,70,48,.08); }
+.brand-mark { width:4.2rem; height:4.2rem; display:grid; place-items:center; overflow:hidden; color:transparent; background:white url("../assets/anabadeicon.jpeg") center/contain no-repeat; border:1px solid var(--line); border-radius:.85rem; font-size:0; box-shadow:0 .25rem .8rem rgba(17,70,48,.08); }
 .brand-name { display:flex; align-items:baseline; gap:.55rem; font-size:1.25rem; font-weight:900; }
 .brand-name small { color:var(--muted); font:700 .73rem/1 Arial,sans-serif; letter-spacing:.06em; text-transform:uppercase; }
 .header-note,.back-link { color:var(--brand); font-size:.88rem; font-weight:800; text-decoration:none; }
