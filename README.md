@@ -1,4 +1,4 @@
-# أنا بدي | Ana Bade — v3.4
+# أنا بدي | Ana Bade — v4.0
 
 Pure HTML, CSS and JavaScript version. No npm installation or build process is required.
 
@@ -34,3 +34,4 @@ The Firebase Web configuration is in `js/firebase-config.js`. Only public web co
 ## Admin setup
 
 Follow `ADMIN-SETUP.md`, then publish `firestore.rules` in Firebase Console. Approval creates an active document in `providers`; rejection never publishes it.
+
