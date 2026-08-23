@@ -1,4 +1,4 @@
-# أنا بدي | Ana Bade — v4.3
+# أنا بدي | Ana Bade — v4.4
 
 Pure HTML, CSS and JavaScript version. No npm installation or build process is required.
 
