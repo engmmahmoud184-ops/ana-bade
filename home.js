@@ -1,7 +1,61 @@
 import { getActiveRegions } from "./services/regions-service.js";
 import { showNotice } from "./ui.js";
+import { db } from "./firebase.js";
+import {
+  collection,
+  doc,
+  getCountFromServer,
+  query,
+  runTransaction,
+  serverTimestamp,
+  where
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 const container = document.querySelector("#regions");
+const providersStat = document.querySelector("#providers-stat");
+const visitsStat = document.querySelector("#visits-stat");
+const numberFormatter = new Intl.NumberFormat("ar-LB");
+
+async function loadProviderCount() {
+  const activeProviders = query(collection(db, "providers"), where("isActive", "==", true));
+  const snapshot = await getCountFromServer(activeProviders);
+  providersStat.textContent = numberFormatter.format(snapshot.data().count);
+}
+
+async function loadAndRegisterVisit() {
+  const statsRef = doc(db, "publicStats", "main");
+  const todayKey = `anaBadeVisit:${new Date().toISOString().slice(0, 10)}`;
+  const countedToday = localStorage.getItem(todayKey) === "1";
+
+  const total = await runTransaction(db, async transaction => {
+    const snapshot = await transaction.get(statsRef);
+    const currentVisits = snapshot.exists() && Number.isInteger(snapshot.data().visits)
+      ? snapshot.data().visits
+      : 0;
+
+    if (!countedToday) {
+      const nextVisits = currentVisits + 1;
+      transaction.set(statsRef, { visits: nextVisits, updatedAt: serverTimestamp() });
+      return nextVisits;
+    }
+
+    return currentVisits;
+  });
+
+  if (!countedToday) localStorage.setItem(todayKey, "1");
+  visitsStat.textContent = numberFormatter.format(total);
+}
+
+Promise.allSettled([loadProviderCount(), loadAndRegisterVisit()]).then(results => {
+  if (results[0].status === "rejected") {
+    console.error(results[0].reason);
+    providersStat.textContent = "—";
+  }
+  if (results[1].status === "rejected") {
+    console.error(results[1].reason);
+    visitsStat.textContent = "—";
+  }
+});
 
 try {
   const regions = await getActiveRegions();
