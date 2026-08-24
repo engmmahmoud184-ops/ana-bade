@@ -9,7 +9,20 @@
   <title>أنا بدي | Ana Bade</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="css/styles.css">
-<link rel="stylesheet" href="css/redesign.css?v=4.4"></head>
+  <link rel="stylesheet" href="css/redesign.css?v=4.5">
+  <style id="homepage-critical">
+    .popular-services{margin:0 0 3.5rem!important;padding:clamp(1.35rem,4vw,2.2rem)!important;background:linear-gradient(145deg,#f0f8f2,#fff)!important;border:1px solid #d6e8dc!important;border-radius:1.5rem!important;box-shadow:0 1rem 2.8rem rgba(3,75,51,.07)!important}
+    .popular-services .section-intro{display:flex!important;align-items:end!important;justify-content:space-between!important;gap:2rem!important;margin-bottom:1.4rem!important}
+    .service-shortcuts{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:1.1rem!important;width:100%!important}
+    .service-shortcuts>a{display:grid!important;grid-template-columns:3.7rem minmax(0,1fr)!important;grid-template-rows:auto auto auto!important;column-gap:.9rem!important;min-height:9.2rem!important;padding:1.15rem!important;align-items:center!important;text-align:right!important;text-decoration:none!important;color:#082f25!important;background:#fff!important;border:1px solid #d6e7dc!important;border-radius:1.15rem!important;box-shadow:0 .5rem 1.35rem rgba(3,75,51,.06)!important}
+    .service-shortcuts>a>span{display:grid!important;grid-row:1/4!important;width:3.7rem!important;height:3.7rem!important;place-items:center!important;font-size:1.8rem!important;background:#eaf6ee!important;border-radius:1rem!important}
+    .service-shortcuts>a>strong{display:block!important;align-self:end!important;font-size:1.08rem!important;text-decoration:none!important}.service-shortcuts>a>small{display:block!important;align-self:start!important;margin-top:.15rem!important;color:#5d7169!important;text-decoration:none!important}.service-shortcuts>a::after{content:"اختار منطقتك  ←"!important;grid-column:2!important;align-self:end!important;margin-top:.55rem!important;color:#087a3f!important;font-size:.76rem!important;font-weight:800!important;text-decoration:none!important}
+    .how-it-works{display:grid!important;grid-template-columns:.85fr 1.15fr!important;gap:clamp(2rem,6vw,5rem)!important;margin-bottom:2rem!important;padding:clamp(1.5rem,5vw,3.5rem)!important;color:#fff!important;background:linear-gradient(135deg,#032f23,#034b33)!important;border-radius:1.5rem!important}.steps-list{display:grid!important;gap:.8rem!important;list-style:none!important}.trust-strip{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:.8rem!important}.provider-invite{display:grid!important;grid-template-columns:3.8rem 1fr auto!important;gap:1.2rem!important;align-items:center!important}
+    @media(max-width:60rem){.service-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+    @media(max-width:48rem){.popular-services .section-intro{align-items:start!important;flex-direction:column!important;gap:.45rem!important}.how-it-works{grid-template-columns:1fr!important}.trust-strip{grid-template-columns:1fr!important}}
+    @media(max-width:34rem){.popular-services{padding:1.1rem!important;border-radius:1rem!important}.service-shortcuts{grid-template-columns:1fr!important;gap:.8rem!important}.provider-invite{grid-template-columns:3.2rem 1fr!important}.provider-invite>a{grid-column:1/-1!important}}
+  </style>
+</head>
 <body>
   <main class="site-shell">
     <header class="site-header">
@@ -80,7 +93,7 @@
       <a href="add-service.html">سجّل خدمتك الآن</a>
     </section>
 
-    <footer class="legal-footer"><span>أنا بدي · الإصدار 4.4 · <a href="admin.html">الإدارة</a></span><nav><a href="privacy.html">الخصوصية</a><a href="terms.html">الشروط</a><a href="disclaimer.html">إخلاء المسؤولية</a><a href="contact.html">التواصل</a></nav></footer>
+    <footer class="legal-footer"><span>أنا بدي · الإصدار 4.5 · <a href="admin.html">الإدارة</a></span><nav><a href="privacy.html">الخصوصية</a><a href="terms.html">الشروط</a><a href="disclaimer.html">إخلاء المسؤولية</a><a href="contact.html">التواصل</a></nav></footer>
   </main>
   <script type="module" src="js/home.js"></script>
 </body>
