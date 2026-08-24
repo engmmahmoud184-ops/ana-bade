@@ -4,7 +4,7 @@ import { db } from "./firebase.js";
 import {
   collection,
   doc,
-  getCountFromServer,
+  getDocs,
   query,
   runTransaction,
   serverTimestamp,
@@ -18,8 +18,8 @@ const numberFormatter = new Intl.NumberFormat("ar-LB");
 
 async function loadProviderCount() {
   const activeProviders = query(collection(db, "providers"), where("isActive", "==", true));
-  const snapshot = await getCountFromServer(activeProviders);
-  providersStat.textContent = numberFormatter.format(snapshot.data().count);
+  const snapshot = await getDocs(activeProviders);
+  providersStat.textContent = numberFormatter.format(snapshot.size);
 }
 
 async function loadAndRegisterVisit() {
