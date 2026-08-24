@@ -11,6 +11,18 @@ service cloud.firestore {
     match /categories/{id} { allow read: if resource.data.isActive == true || isAdmin(); allow write: if isAdmin(); }
     match /specialties/{id} { allow read: if resource.data.isActive == true || isAdmin(); allow write: if isAdmin(); }
     match /providers/{id} { allow read: if resource.data.isActive == true || isAdmin(); allow write: if isAdmin(); }
+    match /publicStats/{id} {
+      allow read: if id == 'main';
+      allow create: if id == 'main'
+        && request.resource.data.keys().hasOnly(['visits', 'updatedAt'])
+        && request.resource.data.visits == 1
+        && request.resource.data.updatedAt == request.time;
+      allow update: if id == 'main'
+        && request.resource.data.keys().hasOnly(['visits', 'updatedAt'])
+        && request.resource.data.visits == resource.data.visits + 1
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if isAdmin();
+    }
     match /providerRequests/{id} {
       allow create: if request.resource.data.keys().hasOnly(['name','regionId','townId','categoryId','specialtyIds','phone','whatsapp','address','description','status','source','createdAt'])
         && request.resource.data.keys().hasAll(['name','regionId','townId','categoryId','specialtyIds','phone','address','status','source','createdAt'])

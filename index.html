@@ -9,8 +9,9 @@
   <title>أنا بدي | Ana Bade</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/redesign.css?v=4.5">
+  <link rel="stylesheet" href="css/redesign.css?v=4.6">
   <style id="homepage-critical">
+    .live-stats{display:grid!important;grid-template-columns:1.25fr 1fr 1fr!important;gap:.8rem!important;margin:0 0 1.5rem!important}.live-stats-intro,.live-stats article{display:flex!important;min-height:5.6rem!important;padding:1rem 1.15rem!important;align-items:center!important;gap:.85rem!important;background:#fff!important;border:1px solid #dce8e0!important;border-radius:1rem!important}.live-stats-intro{color:#fff!important;background:linear-gradient(135deg,#034b33,#087a3f)!important}.live-stats-intro div,.live-stats article div{display:flex!important;flex-direction:column!important}.live-stats article strong{color:#034b33!important;font-size:clamp(1.35rem,3vw,1.85rem)!important}
     .popular-services{margin:0 0 3.5rem!important;padding:clamp(1.35rem,4vw,2.2rem)!important;background:linear-gradient(145deg,#f0f8f2,#fff)!important;border:1px solid #d6e8dc!important;border-radius:1.5rem!important;box-shadow:0 1rem 2.8rem rgba(3,75,51,.07)!important}
     .popular-services .section-intro{display:flex!important;align-items:end!important;justify-content:space-between!important;gap:2rem!important;margin-bottom:1.4rem!important}
     .service-shortcuts{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:1.1rem!important;width:100%!important}
@@ -19,7 +20,7 @@
     .service-shortcuts>a>strong{display:block!important;align-self:end!important;font-size:1.08rem!important;text-decoration:none!important}.service-shortcuts>a>small{display:block!important;align-self:start!important;margin-top:.15rem!important;color:#5d7169!important;text-decoration:none!important}.service-shortcuts>a::after{content:"اختار منطقتك  ←"!important;grid-column:2!important;align-self:end!important;margin-top:.55rem!important;color:#087a3f!important;font-size:.76rem!important;font-weight:800!important;text-decoration:none!important}
     .how-it-works{display:grid!important;grid-template-columns:.85fr 1.15fr!important;gap:clamp(2rem,6vw,5rem)!important;margin-bottom:2rem!important;padding:clamp(1.5rem,5vw,3.5rem)!important;color:#fff!important;background:linear-gradient(135deg,#032f23,#034b33)!important;border-radius:1.5rem!important}.steps-list{display:grid!important;gap:.8rem!important;list-style:none!important}.trust-strip{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:.8rem!important}.provider-invite{display:grid!important;grid-template-columns:3.8rem 1fr auto!important;gap:1.2rem!important;align-items:center!important}
     @media(max-width:60rem){.service-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
-    @media(max-width:48rem){.popular-services .section-intro{align-items:start!important;flex-direction:column!important;gap:.45rem!important}.how-it-works{grid-template-columns:1fr!important}.trust-strip{grid-template-columns:1fr!important}}
+    @media(max-width:48rem){.live-stats{grid-template-columns:1fr 1fr!important}.live-stats-intro{grid-column:1/-1!important}.popular-services .section-intro{align-items:start!important;flex-direction:column!important;gap:.45rem!important}.how-it-works{grid-template-columns:1fr!important}.trust-strip{grid-template-columns:1fr!important}}
     @media(max-width:34rem){.popular-services{padding:1.1rem!important;border-radius:1rem!important}.service-shortcuts{grid-template-columns:1fr!important;gap:.8rem!important}.provider-invite{grid-template-columns:3.2rem 1fr!important}.provider-invite>a{grid-column:1/-1!important}}
   </style>
 </head>
@@ -39,6 +40,12 @@
         <div><p class="eyebrow">دليلك للخدمات المحلية في لبنان</p><h1 id="page-title">كل شي بدّك ياه… <em>قريب منك</em></h1><p>اختار منطقتك، لاقي الخدمة المناسبة، وتواصل مباشرة بسهولة.</p></div>
         <div class="campaign-actions"><a class="hero-primary" href="#regions-title">ابدأ البحث</a><a class="hero-secondary" href="add-service.html">سجّل خدمتك</a></div>
       </div>
+    </section>
+
+    <section class="live-stats" aria-label="إحصاءات أنا بدي">
+      <div class="live-stats-intro"><span class="live-dot" aria-hidden="true"></span><div><strong>أنا بدي بالأرقام</strong><small>إحصاءات تتحدث تلقائيًا</small></div></div>
+      <article><span aria-hidden="true">✓</span><div><strong id="providers-stat" aria-live="polite">—</strong><small>مقدمو الخدمات المنشورون</small></div></article>
+      <article><span aria-hidden="true">↗</span><div><strong id="visits-stat" aria-live="polite">—</strong><small>زيارات الموقع</small></div></article>
     </section>
 
     <section class="directory-panel" aria-labelledby="regions-title">
@@ -93,7 +100,7 @@
       <a href="add-service.html">سجّل خدمتك الآن</a>
     </section>
 
-    <footer class="legal-footer"><span>أنا بدي · الإصدار 4.5 · <a href="admin.html">الإدارة</a></span><nav><a href="privacy.html">الخصوصية</a><a href="terms.html">الشروط</a><a href="disclaimer.html">إخلاء المسؤولية</a><a href="contact.html">التواصل</a></nav></footer>
+    <footer class="legal-footer"><span>أنا بدي · الإصدار 4.6 · <a href="admin.html">الإدارة</a></span><nav><a href="privacy.html">الخصوصية</a><a href="terms.html">الشروط</a><a href="disclaimer.html">إخلاء المسؤولية</a><a href="contact.html">التواصل</a></nav></footer>
   </main>
   <script type="module" src="js/home.js"></script>
 </body>

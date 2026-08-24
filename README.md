@@ -1,4 +1,11 @@
-# أنا بدي | Ana Bade — v4.5
+# أنا بدي | Ana Bade — v4.6
+
+## إحصاءات الصفحة الرئيسية
+
+- عدد مقدمي الخدمات يُحسب من سجلات `providers` النشطة في Firestore.
+- إجمالي الزيارات محفوظ في المستند `publicStats/main` ويُسجّل مرة واحدة يوميًا لكل متصفح.
+- يجب نشر محتوى ملف `firestore.rules` المحدّث من Firebase Console حتى يعمل عدّاد الزيارات.
+- عدّاد الزيارات مناسب للنسخة التجريبية، لكنه تقريبي. للحماية المتقدمة من الزيارات الآلية استخدم Firebase App Check وCloud Functions لاحقًا.
 
 Pure HTML, CSS and JavaScript version. No npm installation or build process is required.
 
