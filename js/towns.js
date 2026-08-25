@@ -38,7 +38,7 @@ if (!regionId) {
     const regionName = region?.nameAr || "المنطقة";
     document.querySelector("#region-breadcrumb").textContent = regionName;
     document.querySelector("#towns-subtitle").textContent = `كل البلدات الفعّالة ضمن ${regionName}.`;
-    document.querySelector("#town-count").textContent = `${towns.length.toLocaleString("ar-LB")} بلدة`;
+    document.querySelector("#town-count").textContent = `${towns.length.toLocaleString("en-US")} بلدة`;
     render();
   } catch (error) {
     console.error(error);
