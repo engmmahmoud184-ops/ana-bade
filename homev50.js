@@ -14,7 +14,7 @@ import {
 const container = document.querySelector("#regions");
 const providersStat = document.querySelector("#providers-stat");
 const visitsStat = document.querySelector("#visits-stat");
-const numberFormatter = new Intl.NumberFormat("ar-LB");
+const numberFormatter = new Intl.NumberFormat("en-US");
 
 async function loadProviderCount() {
   const activeProviders = query(collection(db, "providers"), where("isActive", "==", true));

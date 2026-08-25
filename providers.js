@@ -36,7 +36,7 @@ if (!townId || !categoryId || !specialtyId) {
     document.querySelector("#specialties-link").href = specialtiesUrl;
     document.querySelector("#specialties-back-link").href = specialtiesUrl;
     document.querySelector("#providers-subtitle").textContent = `${specialty.nameAr} ضمن ${town.nameAr}.`;
-    document.querySelector("#providers-count").textContent = `${providers.length.toLocaleString("ar-LB")} نتيجة`;
+    document.querySelector("#providers-count").textContent = `${providers.length.toLocaleString("en-US")} نتيجة`;
     container.innerHTML = "";
     container.removeAttribute("aria-busy");
 
