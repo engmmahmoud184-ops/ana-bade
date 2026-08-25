@@ -20,9 +20,11 @@
     [/^اختار الاختصاص المناسب ضمن (.+)\.$/, "Choose a suitable specialty in $1."],
     [/^(.+) ضمن (.+)\.$/, "$1 in $2."]
   ];
-  const footerHtml = '<span>Ana Bade · Version 5.4</span><nav><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="disclaimer.html">Disclaimer</a><a href="contact.html">Contact & Reports</a></nav>';
+  const footerHtml = '<span>Ana Bade · Version 5.5</span><nav><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="disclaimer.html">Disclaimer</a><a href="contact.html">Contact & Reports</a></nav>';
   const language = () => localStorage.getItem("anaBadeLanguage") === "en" ? "en" : "ar";
+  const westernDigits = value => String(value).replace(/[٠-٩]/g, digit => "0123456789"["٠١٢٣٤٥٦٧٨٩".indexOf(digit)]);
   const translateText = value => {
+    value = westernDigits(value);
     const clean = value.trim();
     if (!clean) return value;
     let result = translations[clean];
@@ -49,7 +51,10 @@
       button.addEventListener("click", () => { localStorage.setItem("anaBadeLanguage", lang === "en" ? "ar" : "en"); location.reload(); });
       const actions = header.querySelector(".header-actions"); (actions || header).append(button);
     }
-    if (lang === "en") new MutationObserver(records => records.forEach(record => record.addedNodes.forEach(node => { if (node.nodeType === 1) translateTree(node); else if (node.nodeType === 3) node.nodeValue = translateText(node.nodeValue); }))).observe(document.body,{childList:true,subtree:true});
+    new MutationObserver(records => records.forEach(record => {
+      if (record.type === "characterData") { const fixed = translateText(record.target.nodeValue); if (fixed !== record.target.nodeValue) record.target.nodeValue = fixed; return; }
+      record.addedNodes.forEach(node => { if (node.nodeType === 1) translateTree(node); else if (node.nodeType === 3) node.nodeValue = translateText(node.nodeValue); });
+    })).observe(document.body,{childList:true,subtree:true,characterData:true});
   };
   window.AnaBadeI18n = { language, name: item => language() === "en" ? (item?.nameEn || item?.nameAr || "") : (item?.nameAr || item?.nameEn || "") };
   document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", apply) : apply();
