@@ -4,6 +4,7 @@ import { normalizeSearch, showNotice } from "./ui.js";
 
 const params = new URLSearchParams(location.search);
 const regionId = params.get("region");
+const categoryId = params.get("category");
 const container = document.querySelector("#towns");
 const input = document.querySelector("#town-search");
 let towns = [];
@@ -21,7 +22,7 @@ function render(filter = "") {
   visible.forEach(town => {
     const link = document.createElement("a");
     link.className = "town-row";
-    link.href = `categories.html?town=${encodeURIComponent(town.id)}`;
+    link.href = categoryId ? `providers.html?town=${encodeURIComponent(town.id)}&category=${encodeURIComponent(categoryId)}` : `categories.html?town=${encodeURIComponent(town.id)}`;
     link.innerHTML = `<span><strong></strong><small lang="en" dir="ltr"></small></span><span class="arrow" aria-hidden="true">←</span>`;
     link.querySelector("strong").textContent = town.nameAr;
     link.querySelector("small").textContent = town.nameEn || "";

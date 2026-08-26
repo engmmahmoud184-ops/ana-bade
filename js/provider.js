@@ -34,7 +34,9 @@ if (!providerId) {
       Promise.all((provider.specialtyIds || []).map(getSpecialtyById))
     ]);
     const selectedSpecialty = specialties.find(item => item?.id === specialtyId) || specialties.find(Boolean);
-    const resultsUrl = townId && categoryId && specialtyId ? `providers.html?town=${encodeURIComponent(townId)}&category=${encodeURIComponent(categoryId)}&specialty=${encodeURIComponent(specialtyId)}` : "index.html";
+    const resultsUrl = townId && categoryId
+      ? `providers.html?town=${encodeURIComponent(townId)}&category=${encodeURIComponent(categoryId)}${specialtyId ? `&specialty=${encodeURIComponent(specialtyId)}` : ""}`
+      : "index.html";
     document.querySelector("#results-back-link").href = resultsUrl;
     document.title = `${provider.name || "مقدّم خدمة"} | أنا بدي`;
     document.querySelector("#profile-avatar").textContent = (provider.name || "خ").trim().charAt(0);

@@ -2,6 +2,8 @@
 
 This is a complete clean release. Upload every file and folder in this package to the repository root, replacing the old website files. The active homepage scripts are `js/home.js` and `js/i18n.js`; obsolete homepage scripts are not included.
 
+Homepage performance: the 14 main categories and 9 regions are embedded directly in `index.html`, so they appear instantly without a Firestore read. Towns, providers, counters, submissions, and administration remain connected to Firebase.
+
 ## إحصاءات الصفحة الرئيسية
 
 - عدد مقدمي الخدمات يُحسب من سجلات `providers` النشطة في Firestore.
