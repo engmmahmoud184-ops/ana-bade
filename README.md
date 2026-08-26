@@ -1,6 +1,6 @@
-# أنا بدي | Ana Bade — v6.0 Complete
+# أنا بدي | Ana Bade — v6.2 Complete
 
-This is a complete clean release. Upload every file and folder in this package to the repository root, replacing the old website files. The active homepage scripts are `js/homev60.js` and `js/i18n.js`; obsolete homepage scripts are not included.
+This is a complete clean release. Upload every file and folder in this package to the repository root, replacing the old website files. The active homepage scripts are `js/home.js` and `js/i18n.js`; obsolete homepage scripts are not included.
 
 ## إحصاءات الصفحة الرئيسية
 
