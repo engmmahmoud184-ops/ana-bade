@@ -24,14 +24,19 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
     match /providerRequests/{id} {
-      allow create: if request.resource.data.keys().hasOnly(['name','regionId','townId','categoryId','specialtyIds','phone','whatsapp','address','description','status','source','createdAt'])
-        && request.resource.data.keys().hasAll(['name','regionId','townId','categoryId','specialtyIds','phone','address','status','source','createdAt'])
+      allow create: if request.resource.data.keys().hasOnly(['name','regionId','townId','categoryId','specialtyIds','phone','whatsapp','address','googleMapsUrl','referralCode','paymentReference','paymentDescription','feeUsd','listingYears','paymentStatus','description','status','source','createdAt'])
+        && request.resource.data.keys().hasAll(['name','regionId','townId','categoryId','specialtyIds','phone','address','googleMapsUrl','referralCode','paymentReference','paymentDescription','feeUsd','listingYears','paymentStatus','status','source','createdAt'])
         && request.resource.data.status == 'pending' && request.resource.data.source == 'website'
         && request.resource.data.createdAt == request.time
         && request.resource.data.name is string && request.resource.data.name.size() >= 2 && request.resource.data.name.size() <= 100
         && request.resource.data.phone is string && request.resource.data.phone.size() >= 5 && request.resource.data.phone.size() <= 30
         && request.resource.data.whatsapp is string && request.resource.data.whatsapp.size() <= 30
         && request.resource.data.address is string && request.resource.data.address.size() >= 3 && request.resource.data.address.size() <= 200
+        && request.resource.data.googleMapsUrl is string && request.resource.data.googleMapsUrl.size() <= 500
+        && request.resource.data.referralCode is string && request.resource.data.referralCode.size() <= 40
+        && request.resource.data.paymentReference is string && request.resource.data.paymentReference.matches('^AB-[A-Z0-9-]{10,110}$')
+        && request.resource.data.paymentDescription is string && request.resource.data.paymentDescription.size() >= 10 && request.resource.data.paymentDescription.size() <= 300
+        && request.resource.data.feeUsd == 10 && request.resource.data.listingYears == 3 && request.resource.data.paymentStatus == 'awaiting_review'
         && request.resource.data.description is string && request.resource.data.description.size() <= 600
         && request.resource.data.specialtyIds is list && request.resource.data.specialtyIds.size() == 1;
       allow read, update, delete: if isAdmin();

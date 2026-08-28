@@ -10,3 +10,6 @@
 
 
 لا تضع كلمة مرور الإدارة أو ملف Service Account داخل GitHub. إعدادات Firebase الموجودة في `firebase-config.js` هي إعدادات الويب العامة وليست كلمة مرور.
+# Version 6.5 registration workflow
+
+Publish the included `firestore.rules` before accepting new website registrations. Each request can be approved as either **paid** (after manually confirming the USD 10 Whish Money transfer) or **campaign** (only when the selected region is covered by a free campaign). Both modes publish for three years. Referral codes and payment status remain private admin data; Google Maps links are public on provider results and profiles.

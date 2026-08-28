@@ -1,8 +1,14 @@
-# أنا بدي | Ana Bade — v6.2 Complete
+# أنا بدي | Ana Bade — v6.5 Complete
 
 This is a complete clean release. Upload every file and folder in this package to the repository root, replacing the old website files. The active homepage scripts are `js/home.js` and `js/i18n.js`; obsolete homepage scripts are not included.
 
 Homepage performance: the 14 main categories and 9 regions are embedded directly in `index.html`, so they appear instantly without a Firestore read. Towns, providers, counters, submissions, and administration remain connected to Firebase.
+
+Version 6.5 adds referral codes, paid/free-campaign registration review, a 3-year listing term, and provider Google Maps links. Publish the included `firestore.rules` before testing the updated registration form.
+
+Version 6.5 also calculates first-registration eligibility per town and specialty. The admin request card displays the existing matching-provider count and offers first-free approval only to the oldest eligible pending request.
+
+Version 6.5 removes payment-plan selection from the public form and creates a structured, non-random payment reference plus a human-readable request description after successful submission.
 
 ## إحصاءات الصفحة الرئيسية
 
