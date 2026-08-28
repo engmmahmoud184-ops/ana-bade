@@ -34,7 +34,7 @@ service cloud.firestore {
         && request.resource.data.address is string && request.resource.data.address.size() >= 3 && request.resource.data.address.size() <= 200
         && request.resource.data.googleMapsUrl is string && request.resource.data.googleMapsUrl.size() <= 500
         && request.resource.data.referralCode is string && request.resource.data.referralCode.size() <= 40
-        && request.resource.data.paymentReference is string && request.resource.data.paymentReference.matches('^AB-[A-Z0-9-]{10,110}$')
+        && request.resource.data.paymentReference is string && request.resource.data.paymentReference.size() >= 15 && request.resource.data.paymentReference.size() <= 120
         && request.resource.data.paymentDescription is string && request.resource.data.paymentDescription.size() >= 10 && request.resource.data.paymentDescription.size() <= 300
         && request.resource.data.feeUsd == 10 && request.resource.data.listingYears == 3 && request.resource.data.paymentStatus == 'awaiting_review'
         && request.resource.data.description is string && request.resource.data.description.size() <= 600
