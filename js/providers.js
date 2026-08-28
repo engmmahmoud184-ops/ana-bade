@@ -50,7 +50,7 @@ if (!townId || !categoryId) {
         const profileUrl = `provider.html?id=${encodeURIComponent(provider.id)}&town=${encodeURIComponent(townId)}&category=${encodeURIComponent(categoryId)}${specialtyPart}`;
         const call = phoneHref(provider.phone);
         const whatsapp = whatsappHref(provider.whatsapp || provider.phone);
-        const map = mapsHref(provider.address, town.nameAr);
+        const map = provider.googleMapsUrl || mapsHref(provider.address, town.nameAr);
         card.innerHTML = `<div class="provider-card-top"><span class="provider-avatar" aria-hidden="true"></span><div class="provider-title"><div><h2></h2><span class="verified-badge" hidden>موثّق</span></div><p></p></div><a class="profile-link" href="${profileUrl}">عرض البروفايل <span aria-hidden="true">←</span></a></div><p class="provider-description"></p><div class="provider-address" hidden><span>العنوان</span><strong></strong></div><div class="contact-actions">${actionLink("اتصال مباشر", call, "call-button")}${actionLink("واتساب", whatsapp, "whatsapp-button", true)}${actionLink("عرض العنوان", map, "map-button", true)}</div>`;
         card.querySelector(".provider-avatar").textContent = (provider.name || "خ").trim().charAt(0);
         card.querySelector("h2").textContent = provider.name || "مقدّم خدمة";

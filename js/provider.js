@@ -55,7 +55,7 @@ if (!providerId) {
     const actions = document.querySelector("#profile-actions");
     addAction(actions, `اتصال ${provider.phone || ""}`.trim(), phoneHref(provider.phone), "call-button");
     addAction(actions, "مراسلة عبر واتساب", whatsappHref(provider.whatsapp || provider.phone), "whatsapp-button", true);
-    addAction(actions, "فتح العنوان على الخريطة", mapsHref(provider.address, town?.nameAr), "map-button", true);
+    addAction(actions, "فتح العنوان على الخريطة", provider.googleMapsUrl || mapsHref(provider.address, town?.nameAr), "map-button", true);
     loading.hidden = true;
     profile.hidden = false;
   } catch (error) {
