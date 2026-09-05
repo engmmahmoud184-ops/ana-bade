@@ -24,7 +24,7 @@
     [/^اختار الاختصاص المناسب ضمن (.+)\.$/, "Choose a suitable specialty in $1."],
     [/^(.+) ضمن (.+)\.$/, "$1 in $2."]
   ];
-  const footerHtml = '<span>Ana Bade · Version 6.9</span><nav><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="disclaimer.html">Disclaimer</a><a href="contact.html">Contact & Reports</a></nav>';
+  const footerHtml = '<span>Ana Bade · Version 7.0</span><nav><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="disclaimer.html">Disclaimer</a><a href="contact.html">Contact & Reports</a></nav>';
   const language = () => localStorage.getItem("anaBadeLanguage") === "en" ? "en" : "ar";
   const westernDigits = value => String(value).replace(/[٠-٩]/g, digit => "0123456789"["٠١٢٣٤٥٦٧٨٩".indexOf(digit)]);
   const translateText = value => {
