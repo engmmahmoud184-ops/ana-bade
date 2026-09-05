@@ -60,7 +60,7 @@ form.addEventListener("submit", async event => {
     document.querySelector("#success-reference").textContent=identity.paymentReference;document.querySelector("#success-description").textContent=identity.paymentDescription;
     form.classList.add("hidden"); document.querySelector("#success").classList.remove("hidden");
   } catch (error) {
-    console.error(error); const code=error?.code||"unknown";status.textContent=`لم يُرسل الطلب. رمز الخطأ: ${code}. تأكد من نشر قواعد الأمان الخاصة بالنسخة 7.0.`; button.disabled = false;
+    console.error(error); const code=error?.code||"unknown";status.textContent=`لم يُرسل الطلب. رمز الخطأ: ${code}. تأكد من نشر قواعد الأمان الخاصة بالنسخة 7.1.`; button.disabled = false;
   }
 });
 
