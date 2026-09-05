@@ -1,10 +1,10 @@
-# أنا بدي | Ana Bade — v6.9 Complete
+# أنا بدي | Ana Bade — v7.0 Complete
 
 This is a complete clean release. Upload every file and folder in this package to the repository root, replacing the old website files. The active homepage scripts are `js/home.js` and `js/i18n.js`; obsolete homepage scripts are not included.
 
 Homepage performance: the 14 main categories and 9 regions are embedded directly in `index.html`, so they appear instantly. Towns, providers, counters, submissions, and administration remain connected to the cloud data service.
 
-Version 6.9 keeps all previous changes and makes the freelancer feature compact and balanced on desktop and mobile, with clearer cropping, tighter spacing, and a smaller centered call-to-action.
+Version 7.0 keeps all previous changes and uses one optimized freelancer image named `freelancers-communityv1.png`, avoiding missing-format fallbacks on GitHub Pages.
 
 ## إحصاءات الصفحة الرئيسية
 
