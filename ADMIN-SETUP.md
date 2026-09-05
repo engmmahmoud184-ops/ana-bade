@@ -10,6 +10,6 @@
 
 
 لا تضع كلمة مرور الإدارة أو أي ملف صلاحيات خاص داخل GitHub. إعدادات اتصال الويب العامة ليست كلمة مرور.
-# Version 6.8 registration workflow
+# Version 6.9 registration workflow
 
 Publish the included security rules before accepting new website registrations. Each request can be approved as **paid** after manually confirming the USD 10 transfer to the Ana Bade account, or granted a private special waiver at admin discretion. Both modes publish for three years. Referral codes and payment status remain private admin data; Google Maps links are public on provider results and profiles.
