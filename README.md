@@ -1,21 +1,17 @@
-# أنا بدي | Ana Bade — v6.5 Complete
+# أنا بدي | Ana Bade — v6.7 Complete
 
 This is a complete clean release. Upload every file and folder in this package to the repository root, replacing the old website files. The active homepage scripts are `js/home.js` and `js/i18n.js`; obsolete homepage scripts are not included.
 
-Homepage performance: the 14 main categories and 9 regions are embedded directly in `index.html`, so they appear instantly without a Firestore read. Towns, providers, counters, submissions, and administration remain connected to Firebase.
+Homepage performance: the 14 main categories and 9 regions are embedded directly in `index.html`, so they appear instantly. Towns, providers, counters, submissions, and administration remain connected to the cloud data service.
 
-Version 6.5 adds referral codes, paid/free-campaign registration review, a 3-year listing term, and provider Google Maps links. Publish the included `firestore.rules` before testing the updated registration form.
-
-Version 6.5 also calculates first-registration eligibility per town and specialty. The admin request card displays the existing matching-provider count and offers first-free approval only to the oldest eligible pending request.
-
-Version 6.5 removes payment-plan selection from the public form and creates a structured, non-random payment reference plus a human-readable request description after successful submission.
+Version 6.7 keeps all Version 6.7 payment and privacy changes and adds a dedicated freelancer spotlight with an original illustration and a direct registration button.
 
 ## إحصاءات الصفحة الرئيسية
 
-- عدد مقدمي الخدمات يُحسب من سجلات `providers` النشطة في Firestore.
+- عدد مقدمي الخدمات يُحسب من سجلات `providers` النشطة.
 - إجمالي الزيارات محفوظ في المستند `publicStats/main` ويزداد مع كل فتح أو إعادة تحميل للصفحة الرئيسية.
-- يجب نشر محتوى ملف `firestore.rules` المحدّث من Firebase Console حتى يعمل عدّاد الزيارات.
-- عدّاد الزيارات مناسب للنسخة التجريبية، لكنه تقريبي. للحماية المتقدمة من الزيارات الآلية استخدم Firebase App Check وCloud Functions لاحقًا.
+- يجب نشر محتوى ملف قواعد الأمان المحدّث حتى يعمل عدّاد الزيارات.
+- عدّاد الزيارات مناسب للنسخة التجريبية، لكنه تقريبي ويمكن تعزيز حمايته لاحقًا.
 
 Pure HTML, CSS and JavaScript version. No npm installation or build process is required.
 
@@ -31,13 +27,13 @@ python -m http.server 8080
 
 Then open `http://localhost:8080`.
 
-## Firebase
+## Cloud data configuration
 
-The Firebase Web configuration is in `js/firebase-config.js`. Only public web configuration belongs there. Never add Firebase Admin service-account credentials.
+The public web connection settings are kept in the dedicated configuration file. Never add administration passwords or private service credentials to the repository.
 
 ## Current pages
 
-- `index.html` — region selection from Firestore
+- `index.html` — service and region selection
 - `towns.html?region=REGION_ID` — towns and instant Arabic/English search
 - `categories.html?town=TOWN_ID` — service categories for the selected town
 - `specialties.html?town=TOWN_ID&category=CATEGORY_ID` — specialties for the selected category
@@ -50,5 +46,5 @@ The Firebase Web configuration is in `js/firebase-config.js`. Only public web co
 
 ## Admin setup
 
-Follow `ADMIN-SETUP.md`, then publish `firestore.rules` in Firebase Console. Approval creates an active document in `providers`; rejection never publishes it.
+Follow `ADMIN-SETUP.md`, then publish the included security rules in the cloud console. Approval creates an active document in `providers`; rejection never publishes it.
 

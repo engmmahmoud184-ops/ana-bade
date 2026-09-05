@@ -9,7 +9,7 @@
   <title>أنا بدي | Ana Bade</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/redesign.css?v=6.5">
+  <link rel="stylesheet" href="css/redesign.css?v=6.7">
   <style id="homepage-critical">
     .live-stats{display:grid!important;grid-template-columns:1.25fr 1fr 1fr!important;gap:.8rem!important;margin:0 0 1.5rem!important}.live-stats-intro,.live-stats article{display:flex!important;min-height:5.6rem!important;padding:1rem 1.15rem!important;align-items:center!important;gap:.85rem!important;background:#fff!important;border:1px solid #dce8e0!important;border-radius:1rem!important}.live-stats-intro{color:#fff!important;background:linear-gradient(135deg,#034b33,#087a3f)!important}.live-stats-intro div,.live-stats article div{display:flex!important;flex-direction:column!important}.live-stats article strong{color:#034b33!important;font-size:clamp(1.35rem,3vw,1.85rem)!important}
     .popular-services{margin:0 0 3.5rem!important;padding:clamp(1.35rem,4vw,2.2rem)!important;background:linear-gradient(145deg,#f0f8f2,#fff)!important;border:1px solid #d6e8dc!important;border-radius:1.5rem!important;box-shadow:0 1rem 2.8rem rgba(3,75,51,.07)!important}
@@ -110,13 +110,25 @@
       <article><span aria-hidden="true">☎</span><div><strong>تواصل مباشر</strong><small>بدون وسيط أو خطوات معقّدة</small></div></article>
     </section>
 
-    <section class="provider-invite" aria-labelledby="provider-invite-title">
-      <span class="provider-invite-mark" aria-hidden="true">أ</span>
-      <div><p class="eyebrow">لأصحاب الأعمال والخدمات</p><h2 id="provider-invite-title">خلّي الناس ببلدتك تلاقيك</h2><p>أضف معلومات خدمتك مجانًا. نراجع الطلب قبل نشره للحفاظ على دليل واضح وموثوق.</p></div>
-      <a href="add-service.html">سجّل خدمتك الآن</a>
+    <section class="freelancer-spotlight" aria-labelledby="freelancer-title">
+      <div class="freelancer-spotlight-copy">
+        <p class="eyebrow">مساحتك لتكبر وتوصل</p>
+        <h2 id="freelancer-title">مستقل؟ خلّي خدمتك أقرب للناس</h2>
+        <p>مهارتك تستحق أن تُكتشف. سجّل اسمك وخدمتك في دليل «أنا بدي» ليتمكّن العملاء في منطقتك من العثور عليك والتواصل معك مباشرة.</p>
+        <ul aria-label="مزايا التسجيل للمستقلين">
+          <li><span aria-hidden="true">✓</span> ظهور محلي ضمن اختصاصك ومنطقتك</li>
+          <li><span aria-hidden="true">✓</span> تواصل مباشر مع العملاء</li>
+          <li><span aria-hidden="true">✓</span> صفحة واضحة تعرّف بخدمتك</li>
+        </ul>
+        <a class="freelancer-cta" href="add-service.html">سجّل خدمتك كمستقل <span aria-hidden="true">←</span></a>
+        <small>تخضع الطلبات للمراجعة قبل النشر.</small>
+      </div>
+      <div class="freelancer-spotlight-media">
+        <img src="assets/freelancers-community-v1.png" alt="مجموعة من المستقلين المحليين في مجالات رقمية ومهنية وإبداعية" loading="lazy">
+      </div>
     </section>
 
-    <footer class="legal-footer"><span>Ana Bade · Version 6.5</span><nav><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="disclaimer.html">Disclaimer</a><a href="contact.html">Contact &amp; Reports</a></nav></footer>
+    <footer class="legal-footer"><span>Ana Bade · Version 6.7</span><nav><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="disclaimer.html">Disclaimer</a><a href="contact.html">Contact &amp; Reports</a></nav></footer>
   </main>
   <script>
     (function () {
@@ -129,8 +141,8 @@
       });
     }());
   </script>
-  <script type="module" src="js/home.js?v=6.5"></script>
-<script src="js/i18n.js?v=6.5"></script></body>
+  <script type="module" src="js/home.js?v=6.7"></script>
+<script src="js/i18n.js?v=6.7"></script></body>
 </html>
 
 
