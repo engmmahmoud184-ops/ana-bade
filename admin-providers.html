@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#146b4a">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="icon" href="assets/anabadelogo.jpeg" type="image/jpeg">
+  <title>إدارة المسجّلين | أنا بدي</title>
+  <link rel="stylesheet" href="css/styles.css?v=7.1.3">
+  <link rel="stylesheet" href="css/management.css?v=7.1.3">
+  <link rel="stylesheet" href="css/redesign.css?v=7.1">
+</head>
+<body>
+  <main class="site-shell">
+    <header class="site-header"><a class="brand" href="index.html"><span class="brand-mark">أ</span><span class="brand-name">أنا بدي <small lang="en">Ana Bade</small></span></a><a class="back-link" href="admin.html">العودة للوحة الإدارة</a></header>
+    <section class="inner-page management-page providers-admin-page">
+      <div class="management-heading"><p class="eyebrow">إدارة الدليل</p><h1>المسجّلون</h1><p>بحث متقدم، متابعة الحالة، وتفعيل أو تعطيل مقدمي الخدمات.</p></div>
+      <div id="access-card" class="access-card"><p>جارٍ التحقق من صلاحية الإدارة…</p></div>
+      <div id="providers-dashboard" class="hidden">
+        <div class="admin-toolbar"><div><strong id="admin-email"></strong><p>إدارة مقدمي الخدمات المسجّلين</p></div><div class="item-actions"><button id="refresh-providers" class="plain-button" type="button">تحديث</button><button id="logout" class="danger-button" type="button">تسجيل الخروج</button></div></div>
+        <div class="providers-summary"><article><span>إجمالي المسجّلين</span><strong id="total-count">0</strong></article><article><span>الفعّالون</span><strong id="active-count">0</strong></article><article><span>المعطّلون</span><strong id="inactive-count">0</strong></article><article><span>إجمالي المقبوض USD</span><strong id="received-total">0</strong></article></div>
+        <div class="providers-filters">
+          <label class="search-wide"><span>بحث شامل</span><input id="provider-search" type="search" placeholder="الاسم، الهاتف، العنوان، المنطقة أو البلدة"></label>
+          <label><span>الحالة</span><select id="status-filter"><option value="all">الكل</option><option value="active">فعّال</option><option value="inactive">معطّل</option><option value="verified">موثّق</option></select></label>
+          <label><span>المنطقة</span><select id="region-filter"><option value="all">كل المناطق</option></select></label>
+          <label><span>الفئة</span><select id="category-filter"><option value="all">كل الفئات</option></select></label>
+          <button id="clear-filters" class="plain-button" type="button">مسح الفلاتر</button>
+        </div>
+        <p id="results-count" class="form-status" role="status"></p>
+        <div id="providers-grid" class="providers-grid" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="js/admin-providers.js?v=7.1.3"></script>
+</body>
+</html>

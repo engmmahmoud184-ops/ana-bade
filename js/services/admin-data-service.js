@@ -7,6 +7,7 @@ const allDocs = async name => (await getDocs(collection(db,name))).docs.map(item
 export async function getAllProvidersAdmin(){ return sortArabic(await allDocs("providers"),"name"); }
 export async function getAllRegionsAdmin(){ return sortArabic(await allDocs("regions")); }
 export async function getAllTownsAdmin(){ return sortArabic(await allDocs("towns")); }
+export async function getAllCategoriesAdmin(){ return sortArabic(await allDocs("categories")); }
 
 export function updateProviderAdmin(id,data){ return updateDoc(doc(db,"providers",id),{...data,updatedAt:serverTimestamp()}); }
 export function updateRegionAdmin(id,data){ return updateDoc(doc(db,"regions",id),data); }

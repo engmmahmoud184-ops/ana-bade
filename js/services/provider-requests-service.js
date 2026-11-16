@@ -33,7 +33,9 @@ export async function getPendingProviderRequests() {
     .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 }
 
-export async function approveProviderRequest(requestId, adminUid, billingMode = "paid") {
+export async function approveProviderRequest(requestId, adminUid, billingMode = "paid", amountReceivedUsd = 0) {
+  const receivedAmount = Number(amountReceivedUsd);
+  if (!Number.isFinite(receivedAmount) || receivedAmount < 0 || receivedAmount > 1000000) throw new Error("قيمة المبلغ المقبوض غير صالحة.");
   const requestRef = doc(db, "providerRequests", requestId);
   const providerRef = doc(collection(db, "providers"));
   await runTransaction(db, async transaction => {
@@ -47,10 +49,11 @@ export async function approveProviderRequest(requestId, adminUid, billingMode = 
       address:data.address, googleMapsUrl:data.googleMapsUrl || "", referralCode:data.referralCode || "",
       imageUrl:data.imageUrl || "", imagePath:data.imagePath || "",
       description:data.description, isActive:true, isVerified:false, billingMode,
-      feeUsd:billingMode === "paid" ? 10 : 0, listingStartAt:serverTimestamp(), listingExpiresAt:Timestamp.fromDate(expiresAt),
+      feeUsd:billingMode === "paid" ? 10 : 0, amountReceivedUsd:receivedAmount,
+      listingStartAt:serverTimestamp(), listingExpiresAt:Timestamp.fromDate(expiresAt),
       publishedFromRequestId:requestId, createdAt:serverTimestamp()
     });
-    transaction.update(requestRef, { status:"approved", paymentStatus:billingMode === "paid" ? "paid" : "waived", reviewedAt:serverTimestamp(), reviewedBy:adminUid, providerId:providerRef.id });
+    transaction.update(requestRef, { status:"approved", paymentStatus:billingMode === "paid" ? "paid" : "waived", amountReceivedUsd:receivedAmount, reviewedAt:serverTimestamp(), reviewedBy:adminUid, providerId:providerRef.id });
   });
   return providerRef.id;
 }
