@@ -39,7 +39,12 @@ if (!providerId) {
       : "index.html";
     document.querySelector("#results-back-link").href = resultsUrl;
     document.title = `${provider.name || "مقدّم خدمة"} | أنا بدي`;
-    document.querySelector("#profile-avatar").textContent = (provider.name || "خ").trim().charAt(0);
+    const profileAvatar = document.querySelector("#profile-avatar");
+    profileAvatar.textContent = (provider.name || "خ").trim().charAt(0);
+    if (provider.imageUrl) {
+      profileAvatar.classList.add("has-image");
+      profileAvatar.style.backgroundImage = `url(${JSON.stringify(provider.imageUrl)})`;
+    }
     document.querySelector("#profile-name").textContent = provider.name || "مقدّم خدمة";
     document.querySelector("#profile-specialty").textContent = selectedSpecialty?.nameAr || "خدمة محلية";
     document.querySelector("#profile-location").textContent = [town?.nameAr, provider.address].filter(Boolean).join(" · ");

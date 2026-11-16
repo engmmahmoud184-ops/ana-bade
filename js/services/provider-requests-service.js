@@ -1,8 +1,18 @@
 import { collection, doc, getDocs, runTransaction, serverTimestamp, setDoc, Timestamp, updateDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-import { db } from "../firebase.js";
+import { getDownloadURL, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-storage.js";
+import { db, storage } from "../firebase.js";
 
-export async function submitProviderRequest(data) {
+export async function submitProviderRequest(data, imageFile = null) {
   const requestRef = doc(collection(db, "providerRequests"));
+  let imageUrl = "";
+  let imagePath = "";
+  if (imageFile) {
+    const extension = { "image/jpeg":"jpg", "image/png":"png", "image/webp":"webp" }[imageFile.type];
+    if (!extension || imageFile.size > 3 * 1024 * 1024) throw new Error("invalid-image");
+    imagePath = `provider-images/${requestRef.id}/business.${extension}`;
+    const snapshot = await uploadBytes(ref(storage, imagePath), imageFile, { contentType:imageFile.type });
+    imageUrl = await getDownloadURL(snapshot.ref);
+  }
   await setDoc(requestRef, {
     name: data.name.trim(), regionId: data.regionId, townId: data.townId,
     categoryId: data.categoryId, specialtyIds: [data.specialtyId],
@@ -10,6 +20,7 @@ export async function submitProviderRequest(data) {
     address: data.address.trim(), googleMapsUrl: data.googleMapsUrl.trim(),
     referralCode: data.referralCode.trim().toUpperCase(), paymentReference:data.paymentReference, paymentDescription:data.paymentDescription,
     feeUsd: 10, listingYears: 3, paymentStatus: "awaiting_review", description: data.description.trim(),
+    imageUrl, imagePath,
     status: "pending", source: "website", createdAt: serverTimestamp()
   });
   return requestRef;
@@ -34,6 +45,7 @@ export async function approveProviderRequest(requestId, adminUid, billingMode = 
       name:data.name, regionId:data.regionId, townId:data.townId, categoryId:data.categoryId,
       specialtyIds:data.specialtyIds, phone:data.phone, whatsapp:data.whatsapp,
       address:data.address, googleMapsUrl:data.googleMapsUrl || "", referralCode:data.referralCode || "",
+      imageUrl:data.imageUrl || "", imagePath:data.imagePath || "",
       description:data.description, isActive:true, isVerified:false, billingMode,
       feeUsd:billingMode === "paid" ? 10 : 0, listingStartAt:serverTimestamp(), listingExpiresAt:Timestamp.fromDate(expiresAt),
       publishedFromRequestId:requestId, createdAt:serverTimestamp()

@@ -3,6 +3,7 @@ export const firebaseConfig = {
   apiKey: "AIzaSyB_JHcbpfa-GADgmBZK9YQbUpUHLRvQ_Xk",
   authDomain: "anabade.firebaseapp.com",
   projectId: "anabade",
+  storageBucket: "anabade.firebasestorage.app",
   messagingSenderId: "657602764932",
   appId: "1:657602764932:web:4b1b8468aa2e8b636022d1"
 };

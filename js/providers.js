@@ -52,7 +52,12 @@ if (!townId || !categoryId) {
         const whatsapp = whatsappHref(provider.whatsapp || provider.phone);
         const map = provider.googleMapsUrl || mapsHref(provider.address, town.nameAr);
         card.innerHTML = `<div class="provider-card-top"><span class="provider-avatar" aria-hidden="true"></span><div class="provider-title"><div><h2></h2><span class="verified-badge" hidden>موثّق</span></div><p></p></div><a class="profile-link" href="${profileUrl}">عرض البروفايل <span aria-hidden="true">←</span></a></div><p class="provider-description"></p><div class="provider-address" hidden><span>العنوان</span><strong></strong></div><div class="contact-actions">${actionLink("اتصال مباشر", call, "call-button")}${actionLink("واتساب", whatsapp, "whatsapp-button", true)}${actionLink("عرض العنوان", map, "map-button", true)}</div>`;
-        card.querySelector(".provider-avatar").textContent = (provider.name || "خ").trim().charAt(0);
+        const avatar = card.querySelector(".provider-avatar");
+        avatar.textContent = (provider.name || "خ").trim().charAt(0);
+        if (provider.imageUrl) {
+          avatar.classList.add("has-image");
+          avatar.style.backgroundImage = `url(${JSON.stringify(provider.imageUrl)})`;
+        }
         card.querySelector("h2").textContent = provider.name || "مقدّم خدمة";
         card.querySelector(".provider-title p").textContent = specialty?.nameAr || category.nameAr;
         card.querySelector(".provider-description").textContent = provider.description || "تواصل مباشرةً للحصول على مزيد من المعلومات.";

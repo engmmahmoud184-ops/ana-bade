@@ -12,6 +12,36 @@ const category = document.querySelector("#category");
 const specialty = document.querySelector("#specialty");
 const button = document.querySelector("#submit-button");
 const status = document.querySelector("#form-status");
+const imageInput = document.querySelector("#business-image");
+const imagePreviewWrap = document.querySelector("#image-preview-wrap");
+const imagePreview = document.querySelector("#image-preview");
+let previewUrl = "";
+
+function clearSelectedImage() {
+  imageInput.value = "";
+  if (previewUrl) URL.revokeObjectURL(previewUrl);
+  previewUrl = "";
+  imagePreview.removeAttribute("src");
+  imagePreviewWrap.classList.add("hidden");
+}
+
+imageInput.addEventListener("change", () => {
+  const file = imageInput.files[0];
+  if (!file) return clearSelectedImage();
+  const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+  if (!allowedTypes.includes(file.type) || file.size > 3 * 1024 * 1024) {
+    clearSelectedImage();
+    status.textContent = "اختر صورة JPEG أو PNG أو WebP لا يتجاوز حجمها 3MB.";
+    return;
+  }
+  if (previewUrl) URL.revokeObjectURL(previewUrl);
+  previewUrl = URL.createObjectURL(file);
+  imagePreview.src = previewUrl;
+  imagePreviewWrap.classList.remove("hidden");
+  status.textContent = "";
+});
+
+document.querySelector("#remove-image").addEventListener("click", clearSelectedImage);
 
 function setOptions(select, items, placeholder) {
   select.replaceChildren(new Option(placeholder, ""));
@@ -56,7 +86,7 @@ form.addEventListener("submit", async event => {
       address:document.querySelector("#address").value, googleMapsUrl:document.querySelector("#google-maps-url").value,
       referralCode:document.querySelector("#referral-code").value, paymentReference:identity.paymentReference, paymentDescription:identity.paymentDescription,
       description:document.querySelector("#description").value
-    });
+    }, imageInput.files[0] || null);
     document.querySelector("#success-reference").textContent=identity.paymentReference;document.querySelector("#success-description").textContent=identity.paymentDescription;
     form.classList.add("hidden"); document.querySelector("#success").classList.remove("hidden");
   } catch (error) {
