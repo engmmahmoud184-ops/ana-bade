@@ -24,7 +24,7 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
     match /providerRequests/{id} {
-      allow create: if request.resource.data.keys().hasOnly(['name','regionId','townId','categoryId','specialtyIds','phone','whatsapp','address','googleMapsUrl','referralCode','paymentReference','paymentDescription','feeUsd','listingYears','paymentStatus','description','status','source','createdAt'])
+      allow create: if request.resource.data.keys().hasOnly(['name','regionId','townId','categoryId','specialtyIds','phone','whatsapp','address','googleMapsUrl','referralCode','paymentReference','paymentDescription','feeUsd','listingYears','paymentStatus','description','imageUrl','imagePath','status','source','createdAt'])
         && request.resource.data.keys().hasAll(['name','regionId','townId','categoryId','specialtyIds','phone','address','googleMapsUrl','referralCode','paymentReference','paymentDescription','feeUsd','listingYears','paymentStatus','status','source','createdAt'])
         && request.resource.data.status == 'pending' && request.resource.data.source == 'website'
         && request.resource.data.createdAt == request.time
@@ -38,6 +38,8 @@ service cloud.firestore {
         && request.resource.data.paymentDescription is string && request.resource.data.paymentDescription.size() >= 10 && request.resource.data.paymentDescription.size() <= 300
         && request.resource.data.feeUsd == 10 && request.resource.data.listingYears == 3 && request.resource.data.paymentStatus == 'awaiting_review'
         && request.resource.data.description is string && request.resource.data.description.size() <= 600
+        && request.resource.data.imageUrl is string && request.resource.data.imageUrl.size() <= 1500
+        && request.resource.data.imagePath is string && request.resource.data.imagePath.size() <= 250
         && request.resource.data.specialtyIds is list && request.resource.data.specialtyIds.size() == 1;
       allow read, update, delete: if isAdmin();
     }
