@@ -1,0 +1,14 @@
+{
+  "name": "Ana Bade",
+  "version": "7.1.0",
+  "date": "2026-11-16",
+  "stack": "HTML, CSS, JavaScript",
+  "pages": [
+    "regions",
+    "towns",
+    "categories",
+    "specialties",
+    "providers",
+    "provider-profile"
+  ]
+}

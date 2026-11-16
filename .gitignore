@@ -1,0 +1,26 @@
+# Operating-system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor settings
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+*.local
+
+# Logs and temporary output
+*.log
+tmp/
+temp/
+
+# Optional local dependencies and build output
+node_modules/
+dist/
+coverage/

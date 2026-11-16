@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#146b4a">
+  <link rel="icon" href="assets/anabadelogo.jpeg" type="image/jpeg">
+  <meta name="description" content="اختر اختصاص الخدمة التي تحتاجها في بلدتك.">
+  <title>اختيار الاختصاص | أنا بدي</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/redesign.css?v=7.1"></head>
+<body>
+  <main class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="أنا بدي - الصفحة الرئيسية">
+        <span class="brand-mark" aria-hidden="true">أ</span>
+        <span class="brand-name">أنا بدي <small lang="en">Ana Bade</small></span>
+      </a>
+      <a id="categories-back-link" class="back-link" href="index.html">تغيير الفئة <span aria-hidden="true">←</span></a>
+    </header>
+
+    <div class="inner-page">
+      <nav class="breadcrumbs" aria-label="مسار التصفح">
+        <a href="index.html">المناطق</a><span>/</span><a id="towns-link" href="index.html">البلدات</a><span>/</span><a id="categories-link" href="index.html">الفئات</a><span>/</span><strong id="category-breadcrumb">الفئة</strong>
+      </nav>
+
+      <section class="specialties-heading">
+        <div>
+          <p class="step">الخطوة 4 من 5</p>
+          <h1>حدّد<br><em>الاختصاص</em></h1>
+          <p id="specialties-subtitle">عم نحمّل الاختصاصات...</p>
+        </div>
+        <div class="selection-summary" aria-label="الاختيارات الحالية">
+          <div><span>البلدة</span><strong id="selected-town">—</strong></div>
+          <div><span>الفئة</span><strong id="selected-category">—</strong></div>
+        </div>
+      </section>
+
+      <section id="specialties" class="specialty-list" aria-label="الاختصاصات" aria-live="polite" aria-busy="true">
+        <span class="skeleton specialty-skeleton"></span><span class="skeleton specialty-skeleton"></span><span class="skeleton specialty-skeleton"></span><span class="skeleton specialty-skeleton"></span>
+      </section>
+    </div>
+
+    <footer class="legal-footer"><span>Ana Bade · Version 7.1</span><nav><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="disclaimer.html">Disclaimer</a><a href="contact.html">Contact &amp; Reports</a></nav></footer>
+  </main>
+  <script type="module" src="js/specialties.js"></script>
+<script src="js/i18n.js?v=7.1"></script></body>
+</html>
+
+
