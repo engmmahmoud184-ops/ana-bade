@@ -22,6 +22,21 @@ function addAction(container, label, href, className, external = false) {
   container.append(link);
 }
 
+async function copyProfileUrl(url, status) {
+  try {
+    await navigator.clipboard.writeText(url);
+    status.textContent = "تم نسخ رابط البروفايل.";
+  } catch {
+    const input = document.createElement("input");
+    input.value = url;
+    document.body.append(input);
+    input.select();
+    document.execCommand("copy");
+    input.remove();
+    status.textContent = "تم نسخ رابط البروفايل.";
+  }
+}
+
 if (!providerId) {
   showNotice(loading, "لم يتم تحديد مقدّم الخدمة.", "ارجع إلى النتائج واختر مقدّم الخدمة.", true);
 } else {
@@ -49,6 +64,28 @@ if (!providerId) {
     document.querySelector("#profile-specialty").textContent = selectedSpecialty?.nameAr || "خدمة محلية";
     document.querySelector("#profile-location").textContent = [town?.nameAr, provider.address].filter(Boolean).join(" · ");
     document.querySelector("#profile-description").textContent = provider.description || "تواصل مباشرةً مع مقدّم الخدمة للحصول على مزيد من المعلومات.";
+    const profileUrl = new URL("provider.html", location.href);
+    profileUrl.searchParams.set("id", providerId);
+    const shareUrl = profileUrl.href;
+    const specialtyLabel = selectedSpecialty?.nameAr || "خدمة محلية";
+    const shareText = `${provider.name || "مقدّم خدمة"} — ${specialtyLabel} على دليل أنا بدي`;
+    const metaDescription = document.querySelector('meta[name="description"]');
+    metaDescription.content = `${shareText}. تواصل مباشرةً واطّلع على معلومات الخدمة.`;
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement("link"); canonical.rel = "canonical"; document.head.append(canonical); }
+    canonical.href = shareUrl;
+    const shareStatus = document.querySelector("#share-status");
+    document.querySelector("#share-whatsapp").href = `https://wa.me/?text=${encodeURIComponent(`${shareText}\n${shareUrl}`)}`;
+    document.querySelector("#copy-profile-link").addEventListener("click", () => copyProfileUrl(shareUrl, shareStatus));
+    document.querySelector("#share-profile").addEventListener("click", async () => {
+      if (!navigator.share) return copyProfileUrl(shareUrl, shareStatus);
+      try {
+        await navigator.share({ title:document.title, text:shareText, url:shareUrl });
+        shareStatus.textContent = "تمت مشاركة البروفايل.";
+      } catch (error) {
+        if (error.name !== "AbortError") shareStatus.textContent = "تعذرت المشاركة. يمكنك نسخ الرابط بدلًا منها.";
+      }
+    });
     document.querySelector("#profile-verified").hidden = !provider.isVerified;
     if (provider.address) {
       document.querySelector("#profile-address-block").hidden = false;
