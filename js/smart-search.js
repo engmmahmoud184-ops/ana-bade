@@ -30,6 +30,56 @@ const categoryAliases = {
   "sports-entertainment":"رياضة نادي ترفيه العاب ألعاب gym sports entertainment games"
 };
 
+// User language is often a product or a need, while Firestore stores precise specialties.
+// These aliases deliberately point to existing specialty document IDs (the leaves).
+const specialtyAliases = {
+  "lawyer":"محامي محاماة محاميين استشارة قانونية قانون دعاوى lawyer attorney legal",
+  "notary":"كاتب عدل وكالة وكالات تصديق مستندات notary",
+  "accountant":"محاسب محاسبة ضرائب حسابات accountant accounting tax",
+  "real-estate-office":"عقارات عقار بيع بيت شراء بيت ايجار إيجار مكتب عقاري real estate property",
+  "laptop-shop":"لابتوب لابتوبات نوتبوك كمبيوتر محمول شراء لابتوب بيع لابتوب laptop laptops notebook",
+  "computer-repair":"تصليح لابتوب صيانة لابتوب تصليح كمبيوتر صيانة كمبيوتر فورمات laptop repair computer repair format",
+  "mobile-shop":"تلفون تليفون هاتف جوال موبايل سمارت فون شراء تلفون بيع تلفون phone mobile smartphone",
+  "mobile-repair":"تصليح تلفون صيانة تلفون شاشة تلفون بطارية تلفون تصليح موبايل صيانة موبايل phone repair mobile repair",
+  "electronics-shop":"الكترونيات إلكترونيات اجهزة أجهزة كهربائية electronics devices",
+  "internet-services":"انترنت إنترنت اشتراك نت واي فاي wifi internet",
+  "software-development":"برمجة تطبيق برنامج سيستم software app application programming",
+  "web-design":"موقع وبسايت ويب تصميم موقع website web design",
+  "graphic-design":"غرافيك جرافيك لوغو شعار هوية بصرية graphic logo branding",
+  "printing":"طباعة مطبعة كرت بزنس بروشور banner printing press",
+  "security-cameras":"كاميرات مراقبة كاميرا مراقبة cctv security camera",
+  "electrician":"كهربجي كهربائي كهرباء منزل اشتراك كهرباء electrician electrical",
+  "building-electrician":"كهربجي بناء كهرباء بناء تمديد كهرباء building electrician wiring",
+  "plumber":"سباك صحي تمديدات مياه plumber plumbing",
+  "home-plumber":"سباك منازل سباك بيت مجاري مياه home plumber plumbing",
+  "car-mechanic":"ميكانيكي ميكانيك تصليح سيارة كراج mechanic garage car repair",
+  "auto-electrician":"كهربجي سيارات كهربائي سيارات كهرباء سيارة auto electrician",
+  "tires":"دواليب اطارات إطارات بنشرجي tires wheels puncture",
+  "restaurant":"مطعم مطاعم اكل أكل غدا غداء عشا عشاء restaurant food",
+  "fast-food":"فاست فود وجبة سريعة برغر برغر ساندويش fast food burger sandwich",
+  "cafe":"كافيه قهوة اركيلة أركيلة coffee cafe",
+  "bakery":"فرن مخبز خبز bakery bread",
+  "dentist":"طبيب اسنان طبيب أسنان دكتور اسنان دكتور أسنان سنان dentist dental",
+  "general-doctor":"دكتور طبيب حكيم طب عام doctor physician general doctor",
+  "pediatrician":"طبيب اطفال طبيب أطفال دكتور اطفال دكتور أطفال pediatrician children doctor",
+  "ophthalmologist":"طبيب عيون دكتور عيون عيون ophthalmologist eye doctor",
+  "dermatologist":"طبيب جلدية دكتور جلد جلدية dermatologist skin doctor",
+  "cardiologist":"طبيب قلب دكتور قلب قلب cardiologist heart doctor",
+  "gynecologist":"طبيب نسائية دكتور نسائية نسائية gynecologist women doctor",
+  "pharmacy":"صيدلية دوا دواء ادوية أدوية pharmacy medicine",
+  "medical-laboratory":"مختبر تحاليل فحص دم تحاليل laboratory blood test",
+  "physiotherapy":"علاج فيزيائي علاج طبيعي فيزيو physiotherapy physical therapy",
+  "barber":"حلاق حلاقة رجالي barber haircut",
+  "women-salon":"كوافير صالون نسائي شعر نسائي women salon hairdresser",
+  "photographer":"مصور فوتوغراف تصوير صور photographer photo",
+  "videographer":"تصوير فيديو فيديو عرس videographer video",
+  "taxi":"تاكسي سيارة اجرة سيارة أجرة taxi cab",
+  "delivery":"دليفري توصيل طلب توصيل طلبات delivery courier",
+  "private-tutor":"استاذ خصوصي أستاذ خصوصي مدرس خصوصي دروس خصوصية private tutor",
+  "school":"مدرسة تسجيل مدرسة school",
+  "veterinarian":"بيطري طبيب حيوانات دكتور حيوانات veterinarian vet"
+};
+
 let serviceItems = [];
 let locationItems = [];
 let selectedService = null;
@@ -89,8 +139,8 @@ function ranked(items, query, limit = 8) {
 }
 
 function serviceTypeLabel(type) {
-  const ar = { category:"فئة", specialty:"اختصاص", provider:"بزنس أو شخص" };
-  const en = { category:"Category", specialty:"Specialty", provider:"Business or provider" };
+  const ar = { category:"فئة عامة", specialty:"اختصاص دقيق", provider:"بزنس أو شخص" };
+  const en = { category:"General category", specialty:"Precise specialty", provider:"Business or provider" };
   return (language() === "en" ? en : ar)[type];
 }
 
@@ -157,6 +207,10 @@ function suggestionsFor(kind, query) {
     items = items.filter(item => item.type !== "provider" || matchesLocation(item.raw, selectedLocation));
   }
   if (kind === "service" && searchable(query).length < 2) items = items.filter(item => item.type !== "provider");
+  if (kind === "service" && searchable(query)) {
+    const hasStrongLeaf = items.some(item => item.type === "specialty" && matchScore(item, query) >= 65);
+    if (hasStrongLeaf) items = items.filter(item => item.type !== "category");
+  }
   return ranked(items, query);
 }
 
@@ -204,6 +258,8 @@ function resolveTyped(kind) {
   const matches = suggestionsFor(kind, input.value);
   if (!matches.length) return null;
   const firstScore = matchScore(matches[0], input.value);
+  const secondScore = matches[1] ? matchScore(matches[1], input.value) : 0;
+  if (kind === "service" && firstScore === secondScore && matches[0].type === "specialty" && matches[1]?.type === "specialty") return null;
   return firstScore >= 65 ? matches[0] : null;
 }
 
@@ -232,7 +288,7 @@ async function loadSearchData() {
 
     serviceItems = [
       ...categories.map((item, index) => ({ ...item, type:"category", typeRank:1, defaultRank:40 - index, categoryId:item.id, raw:item, searchText:searchable(`${item.nameAr} ${item.nameEn || ""} ${categoryAliases[item.id] || ""}`) })),
-      ...specialties.map(item => ({ ...item, type:"specialty", typeRank:0, defaultRank:25, raw:item, meta:itemName(categoryById.get(item.categoryId) || {}), searchText:searchable(`${item.nameAr} ${item.nameEn || ""}`) })),
+      ...specialties.map(item => ({ ...item, type:"specialty", typeRank:0, defaultRank:25, raw:item, meta:itemName(categoryById.get(item.categoryId) || {}), searchText:searchable(`${item.nameAr} ${item.nameEn || ""} ${specialtyAliases[item.id] || ""}`) })),
       ...providers.map(item => {
         const town = townsByVariant.get(item.townId);
         const specialtyNames = (item.specialtyIds || []).map(id => specialtyById.get(id)).filter(Boolean).flatMap(entry => [entry.nameAr, entry.nameEn]);
