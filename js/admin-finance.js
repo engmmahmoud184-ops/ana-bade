@@ -4,7 +4,7 @@ import { auth } from "./auth.js";
 import { db } from "./firebase.js";
 import { getAllProviderRequestsAdmin } from "./services/provider-requests-service.js";
 import { addReferralPayoutAdmin, getReferralPayoutsAdmin } from "./services/referral-payouts-service.js";
-import { getReferralAccountsAdmin, saveReferralAccountAdmin, setReferralAccountActiveAdmin } from "./services/referral-accounts-service.js";
+import { createReferralAccountAdmin, getReferralAccountsAdmin, setReferralAccountActiveAdmin } from "./services/referral-accounts-service.js";
 
 const $ = selector => document.querySelector(selector);
 const make = (tag, className, text) => {
@@ -75,20 +75,14 @@ async function recordPayout(code) {
   }
 }
 
-async function connectReferralAccount(group) {
-  const uid = prompt("ألصق UID حساب المندوب من Firebase Authentication", group.account?.uid || "");
-  if (uid === null || !uid.trim()) return;
-  const name = prompt("اسم المندوب", group.account?.name || "");
-  if (name === null) return;
-  try {
-    await saveReferralAccountAdmin({ uid, name, referralCode:group.code });
-    alert(`تم ربط الحساب بالرمز ${group.code}. يمكنه الدخول من referral.html`);
-    await loadFinance();
-  } catch (error) { console.error(error); alert(error?.message || "تعذر ربط الحساب."); }
+function prepareReferralAccount(group) {
+  $("#new-referral-code").value = group.code;
+  $("#new-referral-name").focus();
+  $("#create-referral-form").scrollIntoView({ behavior:"smooth", block:"center" });
 }
 
 async function toggleReferralAccount(group) {
-  if (!group.account) return connectReferralAccount(group);
+  if (!group.account) return prepareReferralAccount(group);
   const next = group.account.isActive !== true;
   if (!confirm(`${next ? "تفعيل" : "إيقاف"} دخول المندوب ${group.code}؟`)) return;
   try { await setReferralAccountActiveAdmin(group.account.uid, next); await loadFinance(); }
@@ -116,15 +110,18 @@ function renderReferrals() {
     const pay = make("button", "secondary-button", "تسجيل دفعة للمندوب");
     pay.type = "button";
     pay.addEventListener("click", () => recordPayout(group.code));
-    const accountButton = make("button", "plain-button", group.account ? "تعديل ربط الحساب" : "ربط حساب دخول");
-    accountButton.type = "button";
-    accountButton.addEventListener("click", () => connectReferralAccount(group));
     const toggleButton = make("button", group.account?.isActive === true ? "danger-button" : "secondary-button", group.account?.isActive === true ? "إيقاف الدخول" : "تفعيل الدخول");
     toggleButton.type = "button";
     toggleButton.addEventListener("click", () => toggleReferralAccount(group));
     const actions = make("div", "item-actions");
-    actions.append(pay, accountButton);
+    actions.append(pay);
     if (group.account) actions.append(toggleButton);
+    else {
+      const createButton = make("button", "plain-button", "إنشاء حساب دخول");
+      createButton.type = "button";
+      createButton.addEventListener("click", () => prepareReferralAccount(group));
+      actions.append(createButton);
+    }
     card.append(values, actions);
     grid.append(card);
   });
@@ -183,6 +180,21 @@ async function loadFinance() {
 }
 
 $("#finance-search").addEventListener("input", renderCollections);
+$("#create-referral-form").addEventListener("submit", async event => {
+  event.preventDefault();
+  const button = $("#create-referral-button"), status = $("#create-referral-status");
+  button.disabled = true;
+  status.textContent = "جارٍ إنشاء الحساب…";
+  try {
+    await createReferralAccountAdmin({ name:$("#new-referral-name").value, referralCode:$("#new-referral-code").value, email:$("#new-referral-email").value, password:$("#new-referral-password").value });
+    status.textContent = "تم إنشاء الحساب. أعطِ المندوب البريد وكلمة المرور ورابط بوابة المندوب.";
+    event.currentTarget.reset();
+    await loadFinance();
+  } catch (error) {
+    console.error(error);
+    status.textContent = error?.code === "auth/email-already-in-use" ? "هذا البريد مستخدم مسبقاً." : (error?.message || "تعذر إنشاء الحساب.");
+  } finally { button.disabled = false; }
+});
 $("#refresh-finance").addEventListener("click", loadFinance);
 $("#logout").addEventListener("click", () => signOut(auth));
 
