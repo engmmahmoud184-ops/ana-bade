@@ -156,3 +156,44 @@ label{color:var(--ink)}
 .breadcrumbs{color:var(--muted)}
 footer{color:var(--muted)}
 @media(max-width:42rem){.form-grid{grid-template-columns:1fr;gap:1rem}.field-full{grid-column:auto}.form-card{padding:1.15rem}.management-heading{margin-bottom:1rem}}
+
+/* v8.2 provider identity: logos should read as brand marks, not cropped avatars. */
+.provider-card{padding:1.35rem}
+.provider-card-top{grid-template-columns:4.75rem minmax(0,1fr) auto;gap:1rem;align-items:center}
+.provider-avatar{
+  width:4.75rem;height:4.75rem;box-sizing:border-box;padding:.38rem;
+  color:#fff;background:linear-gradient(145deg,var(--brand),var(--brand-dark));
+  border:1px solid #cfe0d6;border-radius:1.15rem;
+  box-shadow:0 .35rem 1rem rgba(3,63,45,.1);font-size:1.55rem;
+}
+.provider-avatar.has-image{
+  background-color:#fff;background-size:contain;background-origin:content-box;
+  background-clip:padding-box;background-position:center;background-repeat:no-repeat;
+}
+.provider-title{min-width:0}.provider-title h2{overflow-wrap:anywhere;line-height:1.35}
+.provider-title p{margin-top:.22rem}.profile-link{padding:.42rem .65rem;background:var(--soft);border-radius:999px;white-space:nowrap}
+.profile-link:hover{color:#fff;background:var(--brand)}
+.provider-description{margin:1rem 0;color:var(--muted);line-height:1.75}
+.provider-address{align-items:center;padding:.75rem .9rem;background:var(--surface-subtle);border:1px solid #e3ebe6}
+.contact-actions{padding-top:.95rem;border-top:1px solid #e5ece8}
+.contact-actions .contact-button{min-height:2.9rem;padding-inline:1.1rem}
+
+.profile-avatar{
+  width:8rem;height:8rem;box-sizing:border-box;padding:.55rem;color:#fff;
+  background:linear-gradient(145deg,var(--brand),var(--brand-dark));
+  border:1px solid rgba(255,255,255,.68);border-radius:1.45rem;
+  box-shadow:0 .8rem 1.8rem rgba(2,40,28,.2);transform:none;
+}
+.profile-avatar.has-image{
+  background-color:#fff;background-size:contain;background-origin:content-box;
+  background-clip:padding-box;background-position:center;background-repeat:no-repeat;
+}
+.registered-avatar{box-sizing:border-box;padding:.32rem;background-size:contain;background-origin:content-box;background-repeat:no-repeat;background-color:#fff;border:1px solid var(--line)}
+
+@media(max-width:40rem){
+  .provider-card{padding:1rem}.provider-card-top{grid-template-columns:4rem minmax(0,1fr);gap:.8rem}
+  .provider-avatar{width:4rem;height:4rem;padding:.3rem;border-radius:1rem}
+  .profile-link{grid-column:2;width:fit-content;margin-top:.15rem}
+  .provider-description{margin:.85rem 0}.contact-actions{grid-template-columns:1fr 1fr}
+  .profile-avatar{width:6.25rem;height:6.25rem;padding:.45rem}
+}
