@@ -54,6 +54,9 @@ service cloud.firestore {
         && request.resource.data.pageUrl is string && request.resource.data.pageUrl.size() <= 500;
       allow read, update, delete: if isAdmin();
     }
+    match /referralPayouts/{id} {
+      allow read, create, update, delete: if isAdmin();
+    }
     match /{document=**} { allow read, write: if false; }
   }
 }
