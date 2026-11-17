@@ -1,5 +1,6 @@
 import { getTownById } from "./services/towns-service.js";
 import { getActiveCategories } from "./services/categories-service.js";
+import { getActiveProviders, townIdVariants } from "./services/providers-service.js";
 import { showNotice } from "./ui.js";
 
 const params = new URLSearchParams(location.search);
@@ -12,6 +13,11 @@ if (!townId) {
   try {
     const [town, categories] = await Promise.all([getTownById(townId), getActiveCategories()]);
     if (!town) throw new Error("Town not found");
+    const providers = await getActiveProviders({ townIds: townIdVariants(town) });
+    const counts = providers.reduce((result, provider) => {
+      result[provider.categoryId] = (result[provider.categoryId] || 0) + 1;
+      return result;
+    }, {});
 
     const townsUrl = `towns.html?region=${encodeURIComponent(town.regionId)}`;
     document.querySelector("#towns-back-link").href = townsUrl;
@@ -30,10 +36,11 @@ if (!townId) {
         link.className = "category-card";
         link.href = `specialties.html?town=${encodeURIComponent(townId)}&category=${encodeURIComponent(category.id)}`;
         link.setAttribute("aria-label", `اختيار ${category.nameAr}`);
-        link.innerHTML = `<span class="category-symbol" aria-hidden="true"></span><span class="category-copy"><small>فئة ${String(index + 1).padStart(2, "0")}</small><strong></strong><span lang="en" dir="ltr"></span></span><span class="category-arrow" aria-hidden="true">←</span>`;
+        link.innerHTML = `<span class="category-symbol" aria-hidden="true"></span><span class="category-copy"><small>فئة ${String(index + 1).padStart(2, "0")}</small><strong></strong><span lang="en" dir="ltr"></span><b class="provider-count-badge"></b></span><span class="category-arrow" aria-hidden="true">←</span>`;
         link.querySelector(".category-symbol").textContent = category.nameAr?.trim().charAt(0) || "•";
         link.querySelector("strong").textContent = category.nameAr;
         link.querySelector(".category-copy > span").textContent = category.nameEn || "";
+        link.querySelector(".provider-count-badge").textContent = `${(counts[category.id] || 0).toLocaleString("en-US")} مسجّل`;
         container.append(link);
       });
     }

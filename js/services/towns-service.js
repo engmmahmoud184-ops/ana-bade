@@ -6,6 +6,11 @@ export async function getActiveTownsByRegion(regionId) {
   return snapshot.docs.map(item => ({ id: item.id, ...item.data() })).sort((a, b) => a.nameAr.localeCompare(b.nameAr, "ar"));
 }
 
+export async function getAllActiveTowns() {
+  const snapshot = await getDocs(query(collection(db, "towns"), where("isActive", "==", true)));
+  return snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+}
+
 export async function getTownById(townId) {
   const snapshot = await getDoc(doc(db, "towns", townId));
   return snapshot.exists() ? { id: snapshot.id, ...snapshot.data() } : null;

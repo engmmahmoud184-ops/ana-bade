@@ -1,6 +1,7 @@
 import { getRegionById } from "./services/regions-service.js";
 import { getActiveTownsByRegion } from "./services/towns-service.js";
 import { normalizeSearch, showNotice } from "./ui.js";
+import { getAllActiveProviders, townIdVariants } from "./services/providers-service.js";
 
 const params = new URLSearchParams(location.search);
 const regionId = params.get("region");
@@ -8,6 +9,7 @@ const categoryId = params.get("category");
 const container = document.querySelector("#towns");
 const input = document.querySelector("#town-search");
 let towns = [];
+let providerCounts = {};
 
 function render(filter = "") {
   const needle = normalizeSearch(filter);
@@ -23,9 +25,10 @@ function render(filter = "") {
     const link = document.createElement("a");
     link.className = "town-row";
     link.href = categoryId ? `providers.html?town=${encodeURIComponent(town.id)}&category=${encodeURIComponent(categoryId)}` : `categories.html?town=${encodeURIComponent(town.id)}`;
-    link.innerHTML = `<span><strong></strong><small lang="en" dir="ltr"></small></span><span class="arrow" aria-hidden="true">←</span>`;
+    link.innerHTML = `<span><strong></strong><small lang="en" dir="ltr"></small><b class="provider-count-badge"></b></span><span class="arrow" aria-hidden="true">←</span>`;
     link.querySelector("strong").textContent = town.nameAr;
     link.querySelector("small").textContent = town.nameEn || "";
+    link.querySelector(".provider-count-badge").textContent = `${(providerCounts[town.id] || 0).toLocaleString("en-US")} مسجّل`;
     container.append(link);
   });
 }
@@ -34,8 +37,15 @@ if (!regionId) {
   showNotice(container, "لم يتم اختيار منطقة.", "ارجع إلى الصفحة الرئيسية واختر منطقتك.", true);
 } else {
   try {
-    const [region, items] = await Promise.all([getRegionById(regionId), getActiveTownsByRegion(regionId)]);
+    const [region, items, providers] = await Promise.all([getRegionById(regionId), getActiveTownsByRegion(regionId), getAllActiveProviders()]);
     towns = items;
+    const townLookup = new Map(towns.flatMap(town => townIdVariants(town).map(id => [id, town.id])));
+    providerCounts = providers.reduce((result, provider) => {
+      if (categoryId && provider.categoryId !== categoryId) return result;
+      const currentTownId = townLookup.get(provider.townId);
+      if (currentTownId) result[currentTownId] = (result[currentTownId] || 0) + 1;
+      return result;
+    }, {});
     const regionName = region?.nameAr || "المنطقة";
     document.querySelector("#region-breadcrumb").textContent = regionName;
     document.querySelector("#towns-subtitle").textContent = `كل البلدات الفعّالة ضمن ${regionName}.`;

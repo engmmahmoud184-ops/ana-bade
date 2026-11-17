@@ -11,6 +11,19 @@ export async function getActiveProviders({ townIds, categoryId, specialtyId }) {
     .sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar", { sensitivity: "base" }));
 }
 
+export async function getAllActiveProviders() {
+  const snapshot = await getDocs(query(collection(db, "providers"), where("isActive", "==", true)));
+  return snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+}
+
+export function townIdVariants(town) {
+  const legacyKey = String(town?.legacyKey || "").trim();
+  const normalizedLegacyKey = legacyKey.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const slugLegacyKey = legacyKey.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const idSuffix = String(town?.id || "").split("__").pop();
+  return [...new Set([town?.id, idSuffix, legacyKey, normalizedLegacyKey, slugLegacyKey].filter(Boolean))];
+}
+
 export async function getProviderById(providerId) {
   const snapshot = await getDoc(doc(db, "providers", providerId));
   return snapshot.exists() ? { id: snapshot.id, ...snapshot.data() } : null;
