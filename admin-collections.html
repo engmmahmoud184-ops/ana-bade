@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#146b4a">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="icon" href="assets/anabadelogo.jpeg" type="image/jpeg">
+  <title>المبالغ المقبوضة | أنا بدي</title>
+  <link rel="stylesheet" href="css/styles.css?v=7.1.5">
+  <link rel="stylesheet" href="css/management.css?v=7.1.5">
+  <link rel="stylesheet" href="css/redesign.css?v=7.1">
+</head>
+<body>
+  <main class="site-shell">
+    <header class="site-header"><a class="brand" href="index.html"><span class="brand-mark">أ</span><span class="brand-name">أنا بدي <small lang="en">Ana Bade</small></span></a><div class="item-actions"><a class="back-link" href="admin-finance.html">المندوبون</a><a class="back-link" href="admin.html">لوحة الإدارة</a></div></header>
+    <section class="inner-page management-page finance-admin-page">
+      <div class="management-heading"><p class="eyebrow">سجل المقبوضات</p><h1>المبالغ المقبوضة</h1><p>كل مبلغ سجّلته عند الموافقة على طلب تسجيل، مع رقم الطلب والتاريخ والمندوب.</p></div>
+      <div id="access-card" class="access-card"><p>جارٍ التحقق من صلاحية الإدارة…</p></div>
+      <div id="collections-dashboard" class="hidden">
+        <div class="admin-toolbar"><div><strong id="admin-email"></strong><p>سجل الموافقات والتحصيل</p></div><div class="item-actions"><button id="refresh-collections" class="plain-button" type="button">تحديث</button><button id="logout" class="danger-button" type="button">تسجيل الخروج</button></div></div>
+        <div class="providers-summary"><article><span>إجمالي المقبوض</span><strong id="received-total">0.00</strong></article><article><span>عمليات قبض</span><strong id="paid-count">0</strong></article><article><span>إعفاءات</span><strong id="waived-count">0</strong></article><article><span>متوسط المقبوض</span><strong id="average-total">0.00</strong></article></div>
+        <div class="providers-filters collections-filters">
+          <label class="search-wide"><span>بحث شامل</span><input id="collections-search" type="search" placeholder="الاسم، الهاتف، رقم الطلب أو رمز المندوب"></label>
+          <label><span>نوع الموافقة</span><select id="payment-filter"><option value="all">الكل</option><option value="paid">مدفوع</option><option value="waived">إعفاء</option></select></label>
+          <label><span>المندوب</span><select id="referral-filter"><option value="all">الكل</option><option value="with">مع مندوب</option><option value="without">بدون مندوب</option></select></label>
+          <button id="clear-collection-filters" class="plain-button" type="button">مسح الفلاتر</button>
+        </div>
+        <div class="section-toolbar"><div><h2>سجل المقبوضات</h2><p id="collections-result-count"></p></div></div>
+        <div id="collections-ledger" class="collections-ledger"></div>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="js/admin-collections.js?v=7.1.5"></script>
+</body>
+</html>
