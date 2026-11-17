@@ -4,6 +4,7 @@ import { auth } from "./auth.js";
 import { db } from "./firebase.js";
 import { getAllProviderRequestsAdmin } from "./services/provider-requests-service.js";
 import { addReferralPayoutAdmin, getReferralPayoutsAdmin } from "./services/referral-payouts-service.js";
+import { getReferralAccountsAdmin, saveReferralAccountAdmin, setReferralAccountActiveAdmin } from "./services/referral-accounts-service.js";
 
 const $ = selector => document.querySelector(selector);
 const make = (tag, className, text) => {
@@ -16,6 +17,7 @@ const money = value => (Number(value) || 0).toLocaleString("en-US", { minimumFra
 let currentAdmin = null;
 let requests = [];
 let payouts = [];
+let referralAccounts = [];
 
 function dateLabel(value) {
   if (!value) return "—";
@@ -38,11 +40,12 @@ function referralGroups() {
   const get = code => {
     const key = String(code || "").trim().toUpperCase();
     if (!key) return null;
-    if (!groups.has(key)) groups.set(key, { code:key, requests:[], payouts:[] });
+    if (!groups.has(key)) groups.set(key, { code:key, requests:[], payouts:[], account:null });
     return groups.get(key);
   };
-  approvedRequests().forEach(item => { const group = get(item.referralCode); if (group) group.requests.push(item); });
+  requests.forEach(item => { const group = get(item.referralCode); if (group) group.requests.push(item); });
   payouts.forEach(item => { const group = get(item.referralCode); if (group) group.payouts.push(item); });
+  referralAccounts.forEach(item => { const group = get(item.referralCode); if (group) group.account = item; });
   return [...groups.values()].sort((a, b) => a.code.localeCompare(b.code, "en"));
 }
 
@@ -72,6 +75,26 @@ async function recordPayout(code) {
   }
 }
 
+async function connectReferralAccount(group) {
+  const uid = prompt("ألصق UID حساب المندوب من Firebase Authentication", group.account?.uid || "");
+  if (uid === null || !uid.trim()) return;
+  const name = prompt("اسم المندوب", group.account?.name || "");
+  if (name === null) return;
+  try {
+    await saveReferralAccountAdmin({ uid, name, referralCode:group.code });
+    alert(`تم ربط الحساب بالرمز ${group.code}. يمكنه الدخول من referral.html`);
+    await loadFinance();
+  } catch (error) { console.error(error); alert(error?.message || "تعذر ربط الحساب."); }
+}
+
+async function toggleReferralAccount(group) {
+  if (!group.account) return connectReferralAccount(group);
+  const next = group.account.isActive !== true;
+  if (!confirm(`${next ? "تفعيل" : "إيقاف"} دخول المندوب ${group.code}؟`)) return;
+  try { await setReferralAccountActiveAdmin(group.account.uid, next); await loadFinance(); }
+  catch (error) { console.error(error); alert("تعذر تعديل حالة الحساب."); }
+}
+
 function renderReferrals() {
   const grid = $("#referrals-grid");
   grid.replaceChildren();
@@ -87,12 +110,22 @@ function renderReferrals() {
       info("التسجيلات", group.requests.length.toLocaleString("en-US")),
       info("المحصّل من تسجيلاته", `${money(collected)} USD`),
       info("المدفوع له", `${money(paid)} USD`),
-      info("آخر دفعة", dateLabel(group.payouts[0]?.createdAt))
+      info("آخر دفعة", dateLabel(group.payouts[0]?.createdAt)),
+      info("دخول المندوب", group.account ? (group.account.isActive === true ? "مفعّل" : "موقوف") : "غير مربوط")
     );
     const pay = make("button", "secondary-button", "تسجيل دفعة للمندوب");
     pay.type = "button";
     pay.addEventListener("click", () => recordPayout(group.code));
-    card.append(values, pay);
+    const accountButton = make("button", "plain-button", group.account ? "تعديل ربط الحساب" : "ربط حساب دخول");
+    accountButton.type = "button";
+    accountButton.addEventListener("click", () => connectReferralAccount(group));
+    const toggleButton = make("button", group.account?.isActive === true ? "danger-button" : "secondary-button", group.account?.isActive === true ? "إيقاف الدخول" : "تفعيل الدخول");
+    toggleButton.type = "button";
+    toggleButton.addEventListener("click", () => toggleReferralAccount(group));
+    const actions = make("div", "item-actions");
+    actions.append(pay, accountButton);
+    if (group.account) actions.append(toggleButton);
+    card.append(values, actions);
     grid.append(card);
   });
 }
@@ -138,7 +171,7 @@ function renderPayouts() {
 async function loadFinance() {
   $("#collections-list").replaceChildren(make("div", "finance-empty", "جارٍ تحميل السجل المالي…"));
   try {
-    [requests, payouts] = await Promise.all([getAllProviderRequestsAdmin(), getReferralPayoutsAdmin()]);
+    [requests, payouts, referralAccounts] = await Promise.all([getAllProviderRequestsAdmin(), getReferralPayoutsAdmin(), getReferralAccountsAdmin()]);
     renderSummary();
     renderReferrals();
     renderCollections();

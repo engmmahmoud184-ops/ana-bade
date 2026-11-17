@@ -20,12 +20,12 @@
       <div id="finance-dashboard" class="hidden">
         <div class="admin-toolbar"><div><strong id="admin-email"></strong><p>السجل المالي الداخلي</p></div><div class="item-actions"><button id="refresh-finance" class="plain-button" type="button">تحديث</button><button id="logout" class="danger-button" type="button">تسجيل الخروج</button></div></div>
         <div class="providers-summary finance-summary"><article><span>إجمالي المقبوض</span><strong id="collected-total">0.00</strong></article><article><span>طلبات مقبوضة</span><strong id="collection-count">0</strong></article><article><span>المدفوع للمندوبين</span><strong id="payout-total">0.00</strong></article><article><span>عدد المندوبين</span><strong id="referral-count">0</strong></article></div>
-        <section class="finance-section"><div class="section-toolbar"><div><h2>بنود المندوبين</h2><p>كل رمز مندوب مع تسجيلاته ودفعاته.</p></div></div><div id="referrals-grid" class="referrals-grid"></div></section>
+        <section class="finance-section"><div class="section-toolbar"><div><h2>بنود المندوبين</h2><p>كل رمز مندوب مع تسجيلاته ودفعاته. أنشئ المستخدم أولاً في Firebase Authentication، ثم اربط UID بالرمز من هنا.</p></div><a class="primary-button" href="referral.html" target="_blank" rel="noopener">فتح بوابة المندوب</a></div><div id="referrals-grid" class="referrals-grid"></div></section>
         <section class="finance-section"><div class="section-toolbar"><div><h2>كل التحصيلات</h2><p id="collections-count"></p></div><label class="compact-search"><span>بحث</span><input id="finance-search" type="search" placeholder="الاسم، رقم الطلب أو رمز المندوب"></label></div><div id="collections-list" class="finance-list"></div></section>
         <section class="finance-section"><div class="section-toolbar"><div><h2>سجل الدفعات للمندوبين</h2><p id="payouts-count"></p></div></div><div id="payouts-list" class="finance-list"></div></section>
       </div>
     </section>
   </main>
-  <script type="module" src="js/admin-finance.js?v=7.1.4"></script>
+  <script type="module" src="js/admin-finance.js?v=7.2.1"></script>
 </body>
 </html>

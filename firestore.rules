@@ -6,6 +6,14 @@ service cloud.firestore {
         && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
         && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.isActive == true;
     }
+    function isActiveReferral() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/referralAccounts/$(request.auth.uid))
+        && get(/databases/$(database)/documents/referralAccounts/$(request.auth.uid)).data.isActive == true;
+    }
+    function referralCode() {
+      return get(/databases/$(database)/documents/referralAccounts/$(request.auth.uid)).data.referralCode;
+    }
     match /regions/{id} { allow read: if resource.data.isActive == true || isAdmin(); allow write: if isAdmin(); }
     match /towns/{id} { allow read: if resource.data.isActive == true || isAdmin(); allow write: if isAdmin(); }
     match /categories/{id} { allow read: if resource.data.isActive == true || isAdmin(); allow write: if isAdmin(); }
@@ -41,9 +49,14 @@ service cloud.firestore {
         && request.resource.data.imageUrl is string && request.resource.data.imageUrl.size() <= 1500
         && request.resource.data.imagePath is string && request.resource.data.imagePath.size() <= 250
         && request.resource.data.specialtyIds is list && request.resource.data.specialtyIds.size() == 1;
-      allow read, update, delete: if isAdmin();
+      allow read: if isAdmin() || (isActiveReferral() && resource.data.referralCode == referralCode());
+      allow update, delete: if isAdmin();
     }
     match /admins/{uid} { allow read: if request.auth != null && request.auth.uid == uid; allow write: if false; }
+    match /referralAccounts/{uid} {
+      allow read: if isAdmin() || (request.auth != null && request.auth.uid == uid);
+      allow create, update, delete: if isAdmin();
+    }
     match /reports/{id} {
       allow create: if request.resource.data.keys().hasOnly(['reporterName','contact','type','details','pageUrl','status','createdAt'])
         && request.resource.data.status == 'open' && request.resource.data.createdAt == request.time
@@ -55,7 +68,8 @@ service cloud.firestore {
       allow read, update, delete: if isAdmin();
     }
     match /referralPayouts/{id} {
-      allow read, create, update, delete: if isAdmin();
+      allow read: if isAdmin() || (isActiveReferral() && resource.data.referralCode == referralCode());
+      allow create, update, delete: if isAdmin();
     }
     match /{document=**} { allow read, write: if false; }
   }
