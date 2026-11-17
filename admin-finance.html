@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#146b4a">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="icon" href="assets/anabadelogo.jpeg" type="image/jpeg">
+  <title>التحصيلات والمندوبون | أنا بدي</title>
+  <link rel="stylesheet" href="css/styles.css?v=7.1.4">
+  <link rel="stylesheet" href="css/management.css?v=7.1.4">
+  <link rel="stylesheet" href="css/redesign.css?v=7.1">
+</head>
+<body>
+  <main class="site-shell">
+    <header class="site-header"><a class="brand" href="index.html"><span class="brand-mark">أ</span><span class="brand-name">أنا بدي <small lang="en">Ana Bade</small></span></a><a class="back-link" href="admin.html">العودة للوحة الإدارة</a></header>
+    <section class="inner-page management-page finance-admin-page">
+      <div class="management-heading"><p class="eyebrow">الإدارة المالية</p><h1>التحصيلات والمندوبون</h1><p>متابعة رسوم التسجيل وكل الدفعات المسجلة للمندوبين.</p></div>
+      <div id="access-card" class="access-card"><p>جارٍ التحقق من صلاحية الإدارة…</p></div>
+      <div id="finance-dashboard" class="hidden">
+        <div class="admin-toolbar"><div><strong id="admin-email"></strong><p>السجل المالي الداخلي</p></div><div class="item-actions"><button id="refresh-finance" class="plain-button" type="button">تحديث</button><button id="logout" class="danger-button" type="button">تسجيل الخروج</button></div></div>
+        <div class="providers-summary finance-summary"><article><span>إجمالي المقبوض</span><strong id="collected-total">0.00</strong></article><article><span>طلبات مقبوضة</span><strong id="collection-count">0</strong></article><article><span>المدفوع للمندوبين</span><strong id="payout-total">0.00</strong></article><article><span>عدد المندوبين</span><strong id="referral-count">0</strong></article></div>
+        <section class="finance-section"><div class="section-toolbar"><div><h2>بنود المندوبين</h2><p>كل رمز مندوب مع تسجيلاته ودفعاته.</p></div></div><div id="referrals-grid" class="referrals-grid"></div></section>
+        <section class="finance-section"><div class="section-toolbar"><div><h2>كل التحصيلات</h2><p id="collections-count"></p></div><label class="compact-search"><span>بحث</span><input id="finance-search" type="search" placeholder="الاسم، رقم الطلب أو رمز المندوب"></label></div><div id="collections-list" class="finance-list"></div></section>
+        <section class="finance-section"><div class="section-toolbar"><div><h2>سجل الدفعات للمندوبين</h2><p id="payouts-count"></p></div></div><div id="payouts-list" class="finance-list"></div></section>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="js/admin-finance.js?v=7.1.4"></script>
+</body>
+</html>

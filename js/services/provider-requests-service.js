@@ -33,6 +33,12 @@ export async function getPendingProviderRequests() {
     .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 }
 
+export async function getAllProviderRequestsAdmin() {
+  const snapshot = await getDocs(collection(db, "providerRequests"));
+  return snapshot.docs.map(item => ({ id:item.id, ...item.data() }))
+    .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+}
+
 export async function approveProviderRequest(requestId, adminUid, billingMode = "paid", amountReceivedUsd = 0) {
   const receivedAmount = Number(amountReceivedUsd);
   if (!Number.isFinite(receivedAmount) || receivedAmount < 0 || receivedAmount > 1000000) throw new Error("قيمة المبلغ المقبوض غير صالحة.");
