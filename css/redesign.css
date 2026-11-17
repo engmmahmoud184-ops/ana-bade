@@ -60,3 +60,72 @@ body,.language-en{font-family:var(--font-ui)}.language-toggle{font-weight:700}
 .freelancer-spotlight-media img{position:absolute;inset:0;display:block;width:100%;max-width:100%;height:100%;min-width:0;object-fit:cover}
 @media(max-width:48rem){.freelancer-spotlight{display:flex;flex-direction:column}.freelancer-spotlight-media{flex:0 0 15rem;height:15rem;order:-1}.freelancer-spotlight-copy{flex:0 1 auto}}
 @media(max-width:34rem){.freelancer-spotlight-media{flex-basis:12rem;height:12rem}.freelancer-spotlight{border-radius:1rem}.freelancer-cta{right:50%;bottom:.6rem;width:calc(100% - 1.2rem);max-width:20rem}}
+
+/* Ana Bade visual system v8: consistent color, controls and interaction. */
+:root{
+  --ink:#0b2f26;--muted:#60756c;
+  --brand:#087a3f;--brand-hover:#066b37;--brand-active:#055c30;--brand-dark:#033f2d;
+  --accent:#72c936;--accent-soft:#e6f6d8;--soft:#eaf6ee;
+  --paper:#f5f8f6;--surface:#fff;--surface-subtle:#f9fbfa;--line:#d7e4dc;--line-strong:#b9d1c3;
+  --success:#18794e;--success-soft:#e3f5e9;--warning:#9a6700;--warning-soft:#fff4ce;
+  --danger:#b42318;--danger-hover:#922018;--danger-soft:#fdecea;
+  --focus:rgba(8,122,63,.22);--shadow-sm:0 .25rem .8rem rgba(3,63,45,.06);
+  --shadow-md:0 .75rem 2rem rgba(3,63,45,.09);--shadow-lg:0 1.35rem 3.2rem rgba(3,63,45,.13);
+  --radius-sm:.65rem;--radius-md:.85rem;--radius-lg:1.25rem;--radius-xl:1.55rem;
+}
+body{color:var(--ink);background:radial-gradient(circle at 8% 0,rgba(114,201,54,.09),transparent 26rem),var(--paper)}
+::selection{color:#fff;background:var(--brand)}
+a{color:var(--brand)}
+
+/* One focus language across keyboard, mouse and touch. */
+:where(a,button,input,select,textarea):focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+:where(button,a[class*="button"],.header-cta,.hero-primary,.hero-secondary,.back-link,.admin-page-link){-webkit-tap-highlight-color:transparent}
+:where(button,.header-cta,.hero-primary,.hero-secondary,.primary-button,.secondary-button,.danger-button,.plain-button,.refresh-button,.text-button,.contact-button,.back-link,.admin-page-link){transition:color .18s ease,background-color .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease}
+
+/* Primary actions. */
+:where(.header-cta,.hero-primary,.primary-button,.provider-invite>a){min-height:3rem;display:inline-flex;align-items:center;justify-content:center;padding:.68rem 1.15rem;color:#fff;background:linear-gradient(135deg,var(--brand),#0a8b49);border:1px solid transparent;border-radius:var(--radius-md);font-weight:800;text-decoration:none;box-shadow:0 .45rem 1rem rgba(8,122,63,.19)}
+:where(.header-cta,.hero-primary,.primary-button,.provider-invite>a):hover{color:#fff;background:linear-gradient(135deg,var(--brand-hover),var(--brand));box-shadow:0 .65rem 1.35rem rgba(8,122,63,.25);transform:translateY(-2px)}
+:where(.header-cta,.hero-primary,.primary-button,.provider-invite>a):active{background:var(--brand-active);box-shadow:var(--shadow-sm);transform:translateY(0)}
+
+/* Secondary and quiet actions. */
+:where(.hero-secondary,.secondary-button){min-height:3rem;display:inline-flex;align-items:center;justify-content:center;padding:.68rem 1.15rem;color:var(--brand-dark);background:var(--accent-soft);border:1px solid #bfe3a4;border-radius:var(--radius-md);font-weight:800;text-decoration:none;box-shadow:none}
+:where(.hero-secondary,.secondary-button):hover{color:var(--brand-dark);background:#d9f0c7;border-color:#a7d883;transform:translateY(-2px)}
+:where(.plain-button,.refresh-button,.text-button,.back-link,.admin-page-link){min-height:2.75rem;display:inline-flex;align-items:center;justify-content:center;padding:.58rem .85rem;color:var(--brand);background:var(--surface);border:1px solid var(--line-strong);border-radius:var(--radius-sm);font-weight:800;text-decoration:none;box-shadow:none;cursor:pointer}
+:where(.plain-button,.refresh-button,.text-button,.back-link,.admin-page-link):hover{color:var(--brand-dark);background:var(--soft);border-color:#91b9a1;box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.danger-button{min-height:2.75rem;display:inline-flex;align-items:center;justify-content:center;padding:.58rem .9rem;color:var(--danger);background:var(--danger-soft);border:1px solid #f3c7c3;border-radius:var(--radius-sm);font-weight:800;cursor:pointer}
+.danger-button:hover{color:#fff;background:var(--danger);border-color:var(--danger);transform:translateY(-1px)}
+:where(button,.primary-button,.secondary-button,.danger-button):disabled{opacity:.52;box-shadow:none;cursor:not-allowed;transform:none}
+
+/* Form controls. */
+:where(.field input,.field select,.field textarea,.report-form input,.report-form select,.report-form textarea,.mini-form input,.mini-form select,.compact-search input,.providers-filters input,.providers-filters select,.referral-account-form input){color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:var(--radius-md);box-shadow:0 1px 0 rgba(3,63,45,.02);transition:border-color .18s ease,box-shadow .18s ease,background-color .18s ease}
+:where(.field input,.field select,.field textarea,.report-form input,.report-form select,.report-form textarea,.mini-form input,.mini-form select,.compact-search input,.providers-filters input,.providers-filters select,.referral-account-form input):hover{border-color:#92b6a1}
+:where(.field input,.field select,.field textarea,.report-form input,.report-form select,.report-form textarea,.mini-form input,.mini-form select,.compact-search input,.providers-filters input,.providers-filters select,.referral-account-form input):focus{outline:0;background:#fff;border-color:var(--brand);box-shadow:0 0 0 4px var(--focus)}
+::placeholder{color:#8a9b94;opacity:1}
+label{color:var(--ink)}
+
+/* Cards and application surfaces. */
+:where(.directory-panel,.popular-services,.legal-card,.form-card,.login-card,.admin-toolbar,.admin-panel,.request-card,.registered-card,.providers-filters,.providers-summary article,.profile-section){background:var(--surface);border-color:var(--line);box-shadow:var(--shadow-md)}
+:where(.region-card,.town-row,.category-card,.specialty-row,.provider-card,.service-shortcuts a){border-color:var(--line);box-shadow:var(--shadow-sm)}
+:where(.region-card,.town-row,.category-card,.specialty-row,.provider-card,.service-shortcuts a):hover{border-color:#9cc4aa;box-shadow:var(--shadow-md)}
+.notice{background:var(--soft);border-color:var(--brand)}.notice-error{color:var(--danger);background:var(--danger-soft);border-color:var(--danger)}
+.active-pill{color:var(--success);background:var(--success-soft)}.inactive-pill{color:var(--danger);background:var(--danger-soft)}
+.status-pill{color:var(--warning);background:var(--warning-soft)}
+.verified-badge{color:var(--brand-dark);background:var(--accent-soft);border:1px solid #c4e7aa}
+
+/* Contact actions remain distinct without introducing unrelated colors. */
+.call-button{color:#fff;background:var(--brand)}.call-button:hover{color:#fff;background:var(--brand-hover)}
+.whatsapp-button,.share-whatsapp-button{color:#075e3b;background:#dcf8e7;border-color:#b8e8cb}.whatsapp-button:hover,.share-whatsapp-button:hover{background:#c8f1d8}
+.map-button{color:var(--brand);background:#fff;border-color:var(--line-strong)}.map-button:hover{background:var(--soft);border-color:#91b9a1}
+.share-button{color:var(--brand-dark);background:var(--accent-soft);border-color:#c4e7aa}
+
+/* Navigation and admin states. */
+.admin-tabs{padding:.4rem;background:#e4f1e8;border:1px solid #d3e5d9;box-shadow:inset 0 1px 2px rgba(3,63,45,.03)}
+.admin-tab{color:var(--muted)}.admin-tab:hover{color:var(--brand-dark);background:rgba(255,255,255,.65)}.admin-tab.active{color:#fff;background:var(--brand);box-shadow:0 .35rem .85rem rgba(8,122,63,.18)}
+.site-header{border-color:rgba(8,122,63,.15);box-shadow:var(--shadow-md)}
+.language-toggle{color:var(--brand-dark);border-color:var(--line-strong)}.language-toggle:hover{background:var(--soft);border-color:#91b9a1}
+
+@media(max-width:34rem){
+  :where(.header-cta,.hero-primary,.hero-secondary,.primary-button,.secondary-button){min-height:2.85rem}
+  :where(.plain-button,.refresh-button,.text-button,.back-link,.admin-page-link,.danger-button){min-height:2.65rem}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}:where(button,a,input,select,textarea){transition:none!important}}
