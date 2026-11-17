@@ -182,13 +182,14 @@ async function loadFinance() {
 $("#finance-search").addEventListener("input", renderCollections);
 $("#create-referral-form").addEventListener("submit", async event => {
   event.preventDefault();
+  const form = event.currentTarget;
   const button = $("#create-referral-button"), status = $("#create-referral-status");
   button.disabled = true;
   status.textContent = "جارٍ إنشاء الحساب…";
   try {
     await createReferralAccountAdmin({ name:$("#new-referral-name").value, referralCode:$("#new-referral-code").value, email:$("#new-referral-email").value, password:$("#new-referral-password").value });
     status.textContent = "تم إنشاء الحساب. أعطِ المندوب البريد وكلمة المرور ورابط بوابة المندوب.";
-    event.currentTarget.reset();
+    form.reset();
     await loadFinance();
   } catch (error) {
     console.error(error);
