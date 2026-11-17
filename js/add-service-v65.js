@@ -10,12 +10,15 @@ const region = document.querySelector("#region");
 const town = document.querySelector("#town");
 const category = document.querySelector("#category");
 const specialty = document.querySelector("#specialty");
+const referralInput = document.querySelector("#referral-code");
 const button = document.querySelector("#submit-button");
 const status = document.querySelector("#form-status");
 const imageInput = document.querySelector("#business-image");
 const imagePreviewWrap = document.querySelector("#image-preview-wrap");
 const imagePreview = document.querySelector("#image-preview");
 let previewUrl = "";
+
+referralInput.addEventListener("input", () => { referralInput.value = referralInput.value.toUpperCase(); });
 
 function clearSelectedImage() {
   imageInput.value = "";

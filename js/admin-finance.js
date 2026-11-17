@@ -1,5 +1,5 @@
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+import { doc, getDoc, writeBatch } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 import { auth } from "./auth.js";
 import { db } from "./firebase.js";
 import { getAllProviderRequestsAdmin } from "./services/provider-requests-service.js";
@@ -33,6 +33,23 @@ function info(label, value, className = "") {
 
 function approvedRequests() {
   return requests.filter(item => item.status === "approved");
+}
+
+async function normalizeStoredReferralCodes() {
+  const batch = writeBatch(db);
+  let changed = false;
+  const normalizeItems = (items, collectionName, idKey = "id") => items.forEach(item => {
+    const current = String(item.referralCode || "").trim();
+    const normalized = current.toUpperCase();
+    if (!current || current === normalized) return;
+    batch.update(doc(db, collectionName, item[idKey]), { referralCode:normalized });
+    item.referralCode = normalized;
+    changed = true;
+  });
+  normalizeItems(requests, "providerRequests");
+  normalizeItems(payouts, "referralPayouts");
+  normalizeItems(referralAccounts, "referralAccounts", "uid");
+  if (changed) await batch.commit();
 }
 
 function referralGroups() {
@@ -169,6 +186,7 @@ async function loadFinance() {
   $("#collections-list").replaceChildren(make("div", "finance-empty", "جارٍ تحميل السجل المالي…"));
   try {
     [requests, payouts, referralAccounts] = await Promise.all([getAllProviderRequestsAdmin(), getReferralPayoutsAdmin(), getReferralAccountsAdmin()]);
+    await normalizeStoredReferralCodes();
     renderSummary();
     renderReferrals();
     renderCollections();
@@ -180,6 +198,7 @@ async function loadFinance() {
 }
 
 $("#finance-search").addEventListener("input", renderCollections);
+$("#new-referral-code").addEventListener("input", event => { event.target.value = event.target.value.toUpperCase(); });
 $("#create-referral-form").addEventListener("submit", async event => {
   event.preventDefault();
   const form = event.currentTarget;
