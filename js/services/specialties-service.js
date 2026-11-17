@@ -8,6 +8,13 @@ export async function getActiveSpecialtiesByCategory(categoryId) {
     .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 }
 
+export async function getAllActiveSpecialties() {
+  const snapshot = await getDocs(query(collection(db, "specialties"), where("isActive", "==", true)));
+  return snapshot.docs
+    .map(item => ({ id: item.id, ...item.data() }))
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+}
+
 export async function getSpecialtyById(specialtyId) {
   const snapshot = await getDoc(doc(db, "specialties", specialtyId));
   return snapshot.exists() ? { id: snapshot.id, ...snapshot.data() } : null;

@@ -6,6 +6,7 @@ import { getAllActiveProviders, townIdVariants } from "./services/providers-serv
 const params = new URLSearchParams(location.search);
 const regionId = params.get("region");
 const categoryId = params.get("category");
+const specialtyId = params.get("specialty");
 const container = document.querySelector("#towns");
 const input = document.querySelector("#town-search");
 let towns = [];
@@ -24,7 +25,7 @@ function render(filter = "") {
   visible.forEach(town => {
     const link = document.createElement("a");
     link.className = "town-row";
-    link.href = categoryId ? `providers.html?town=${encodeURIComponent(town.id)}&category=${encodeURIComponent(categoryId)}` : `categories.html?town=${encodeURIComponent(town.id)}`;
+    link.href = categoryId ? `providers.html?town=${encodeURIComponent(town.id)}&category=${encodeURIComponent(categoryId)}${specialtyId ? `&specialty=${encodeURIComponent(specialtyId)}` : ""}` : `categories.html?town=${encodeURIComponent(town.id)}`;
     link.innerHTML = `<span><strong></strong><small lang="en" dir="ltr"></small><b class="provider-count-badge"></b></span><span class="arrow" aria-hidden="true">←</span>`;
     link.querySelector("strong").textContent = town.nameAr;
     link.querySelector("small").textContent = town.nameEn || "";
@@ -42,6 +43,7 @@ if (!regionId) {
     const townLookup = new Map(towns.flatMap(town => townIdVariants(town).map(id => [id, town.id])));
     providerCounts = providers.reduce((result, provider) => {
       if (categoryId && provider.categoryId !== categoryId) return result;
+      if (specialtyId && !(provider.specialtyIds || []).includes(specialtyId)) return result;
       const currentTownId = townLookup.get(provider.townId);
       if (currentTownId) result[currentTownId] = (result[currentTownId] || 0) + 1;
       return result;
