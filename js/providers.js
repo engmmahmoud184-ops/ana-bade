@@ -35,8 +35,10 @@ if (!townId || !categoryId) {
     document.querySelector("#categories-link").href = categoriesUrl;
     document.querySelector("#specialties-link").href = specialtiesUrl;
     document.querySelector("#specialties-back-link").href = specialtiesUrl;
-    document.querySelector("#providers-subtitle").textContent = `${specialty?.nameAr || category.nameAr} ضمن ${town.nameAr}.`;
-    document.querySelector("#providers-count").textContent = `${providers.length.toLocaleString("en-US")} نتيجة`;
+    const serviceLabel = specialty?.nameAr || category.nameAr;
+    document.querySelector("#providers-title").textContent = `${serviceLabel} في ${town.nameAr}`;
+    document.querySelector("#providers-subtitle").textContent = "اختار مقدم الخدمة وتواصل معه مباشرة.";
+    document.querySelector("#providers-count").textContent = `${providers.length.toLocaleString("en-US")} ${providers.length === 1 ? "خيار متاح" : "خيارات متاحة"}`;
     container.innerHTML = "";
     container.removeAttribute("aria-busy");
 
