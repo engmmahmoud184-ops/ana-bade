@@ -2,7 +2,6 @@ import { getActiveRegions } from "./services/regions-service.js";
 import { getAllActiveTowns } from "./services/towns-service.js";
 import { getActiveCategories } from "./services/categories-service.js";
 import { getAllActiveSpecialties } from "./services/specialties-service.js";
-import { getAllActiveProviders, townIdVariants } from "./services/providers-service.js";
 import { normalizeSearch } from "./ui.js";
 
 const form = document.querySelector("#smart-search-form");
@@ -84,8 +83,6 @@ let serviceItems = [];
 let locationItems = [];
 let selectedService = null;
 let selectedLocation = null;
-let townsByVariant = new Map();
-let townById = new Map();
 let regionById = new Map();
 let categoryById = new Map();
 let ready = false;
@@ -124,12 +121,6 @@ function matchScore(item, query) {
   return 0;
 }
 
-function matchesLocation(provider, location) {
-  const providerTown = townsByVariant.get(provider.townId) || townById.get(provider.townId);
-  if (!providerTown) return false;
-  return location.type === "town" ? providerTown.id === location.id : providerTown.regionId === location.id;
-}
-
 function ranked(items, query, limit = 8) {
   return items
     .map(item => ({ item, score:matchScore(item, query) }))
@@ -140,8 +131,8 @@ function ranked(items, query, limit = 8) {
 }
 
 function serviceTypeLabel(type) {
-  const ar = { category:"فئة عامة", specialty:"اختصاص دقيق", provider:"بزنس أو شخص" };
-  const en = { category:"General category", specialty:"Precise specialty", provider:"Business or provider" };
+  const ar = { category:"فئة عامة", specialty:"اختصاص دقيق" };
+  const en = { category:"General category", specialty:"Precise specialty" };
   return (language() === "en" ? en : ar)[type];
 }
 
@@ -176,7 +167,7 @@ function renderSuggestions(input, list, items, kind) {
     const icon = document.createElement("span");
     icon.className = "suggestion-icon";
     icon.setAttribute("aria-hidden", "true");
-    icon.textContent = kind === "service" ? ({ category:"⌘", specialty:"•", provider:"✓" }[item.type]) : (item.type === "town" ? "⌖" : "◉");
+    icon.textContent = kind === "service" ? ({ category:"⌘", specialty:"•" }[item.type]) : (item.type === "town" ? "⌖" : "◉");
     const copy = document.createElement("span");
     const title = document.createElement("strong");
     const meta = document.createElement("small");
@@ -204,10 +195,6 @@ function choose(input, list, item, kind) {
 
 function suggestionsFor(kind, query) {
   let items = kind === "service" ? serviceItems : locationItems;
-  if (kind === "service" && selectedLocation) {
-    items = items.filter(item => item.type !== "provider" || matchesLocation(item.raw, selectedLocation));
-  }
-  if (kind === "service" && searchable(query).length < 2) items = items.filter(item => item.type !== "provider");
   if (kind === "service" && searchable(query)) {
     const hasStrongLeaf = items.some(item => item.type === "specialty" && matchScore(item, query) >= 65);
     if (hasStrongLeaf) items = items.filter(item => item.type !== "category");
@@ -265,12 +252,6 @@ function resolveTyped(kind) {
 }
 
 function destination(service, location) {
-  if (service.type === "provider") {
-    if (!matchesLocation(service.raw, location)) return null;
-    const providerTown = townsByVariant.get(service.raw.townId) || townById.get(service.raw.townId);
-    const specialtyId = service.raw.specialtyIds?.[0];
-    return `provider.html?id=${encodeURIComponent(service.id)}&town=${encodeURIComponent(providerTown.id)}&category=${encodeURIComponent(service.categoryId)}${specialtyId ? `&specialty=${encodeURIComponent(specialtyId)}` : ""}`;
-  }
   const specialtyPart = service.type === "specialty" ? `&specialty=${encodeURIComponent(service.id)}` : "";
   if (location.type === "region") return `towns.html?region=${encodeURIComponent(location.id)}&category=${encodeURIComponent(service.categoryId)}${specialtyPart}`;
   return `providers.html?town=${encodeURIComponent(location.id)}&category=${encodeURIComponent(service.categoryId)}${specialtyPart}`;
@@ -278,20 +259,14 @@ function destination(service, location) {
 
 async function loadSearchData() {
   try {
-    const [regions, towns, categories, specialties, providers] = await Promise.all([
-      getActiveRegions(), getAllActiveTowns(), getActiveCategories(), getAllActiveSpecialties(), getAllActiveProviders()
+    const [regions, towns, categories, specialties] = await Promise.all([
+      getActiveRegions(), getAllActiveTowns(), getActiveCategories(), getAllActiveSpecialties()
     ]);
     regionById = new Map(regions.map(item => [item.id, item]));
-    townById = new Map(towns.map(item => [item.id, item]));
     categoryById = new Map(categories.map(item => [item.id, item]));
-    townsByVariant = new Map(towns.flatMap(town => townIdVariants(town).map(id => [id, town])));
     serviceItems = [
       ...categories.map((item, index) => ({ ...item, type:"category", typeRank:1, defaultRank:40 - index, categoryId:item.id, raw:item, searchText:searchable(`${item.nameAr} ${item.nameEn || ""} ${categoryAliases[item.id] || ""}`) })),
-      ...specialties.map(item => ({ ...item, type:"specialty", typeRank:0, defaultRank:25, raw:item, meta:itemName(categoryById.get(item.categoryId) || {}), searchText:searchable(`${item.nameAr} ${item.nameEn || ""} ${specialtyAliases[item.id] || ""}`) })),
-      ...providers.map(item => {
-        const town = townsByVariant.get(item.townId);
-        return { ...item, type:"provider", typeRank:2, defaultRank:5, raw:item, meta:[town && itemName(town), itemName(categoryById.get(item.categoryId) || {})].filter(Boolean).join(" · "), searchText:searchable(`${item.name || ""} ${item.description || ""}`) };
-      })
+      ...specialties.map(item => ({ ...item, type:"specialty", typeRank:0, defaultRank:25, raw:item, meta:itemName(categoryById.get(item.categoryId) || {}), searchText:searchable(`${item.nameAr} ${item.nameEn || ""} ${specialtyAliases[item.id] || ""}`) }))
     ];
     locationItems = [
       ...towns.map(item => ({ ...item, type:"town", typeRank:0, defaultRank:30, raw:item, meta:itemName(regionById.get(item.regionId) || {}), searchText:searchable(`${item.nameAr} ${item.nameEn || ""} ${item.legacyKey || ""}`) })),
@@ -317,7 +292,7 @@ form.addEventListener("submit", event => {
   const service = resolveTyped("service");
   const location = resolveTyped("location");
   if (!service) {
-    status.textContent = language() === "en" ? "Choose a service, specialty, or business from the suggestions." : "اختار خدمة، اختصاص أو بزنس من الاقتراحات.";
+    status.textContent = language() === "en" ? "Choose a service or specialty from the suggestions." : "اختار خدمة أو اختصاص من الاقتراحات.";
     serviceInput.focus(); refresh(serviceInput, serviceList, "service"); return;
   }
   if (!location) {
