@@ -240,10 +240,11 @@ footer{color:var(--muted)}
 .provider-card{display:flex;min-width:0;flex-direction:column;padding:.75rem;background:#fff;border-radius:1.25rem;transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease}
 .provider-card::before{display:none}
 .provider-card:hover{transform:translateY(-4px);border-color:#a8cab4;box-shadow:var(--shadow-lg)}
-.provider-logo-link{display:grid;width:100%;aspect-ratio:4/3;place-items:center;padding:1rem;box-sizing:border-box;background:linear-gradient(145deg,#f7faf8,#edf5f0);border:1px solid #e1ebe5;border-radius:.95rem;text-decoration:none;overflow:hidden}
+.provider-logo-link{display:grid;width:100%;aspect-ratio:4/3;place-items:center;padding:.65rem;box-sizing:border-box;background:linear-gradient(145deg,#f7faf8,#edf5f0);border:1px solid #e1ebe5;border-radius:.95rem;text-decoration:none;overflow:hidden}
 .provider-logo-link:hover{background:#f1f8f3}
 .provider-logo-link:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
-.provider-card .provider-avatar{width:100%;height:100%;max-width:9rem;max-height:9rem;box-sizing:border-box;padding:.45rem;background-size:contain;background-origin:content-box;background-clip:padding-box;background-position:center;background-repeat:no-repeat;border:0;border-radius:1.1rem;box-shadow:none;font-size:2.6rem}
+.provider-card .provider-avatar{width:7rem;height:7rem;box-sizing:border-box;padding:.45rem;background-size:contain;background-origin:content-box;background-clip:padding-box;background-position:center;background-repeat:no-repeat;border:0;border-radius:1.1rem;box-shadow:none;font-size:2.6rem}
+.provider-card .provider-avatar.has-image{width:100%;height:100%;padding:.2rem;background-color:#fff;border-radius:.75rem}
 .provider-card h2{margin:1rem .35rem .9rem;text-align:center;font-size:1.08rem;line-height:1.4}
 .provider-name-link{display:-webkit-box;overflow:hidden;color:var(--ink);text-decoration:none;-webkit-box-orient:vertical;-webkit-line-clamp:2}.provider-name-link:hover{color:var(--brand)}
 .provider-card .contact-actions{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-top:auto;padding:0;border:0}
@@ -253,4 +254,4 @@ footer{color:var(--muted)}
 .provider-card .call-button{box-shadow:none}
 @media(max-width:58rem){.providers-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:40rem){.results-heading{align-items:flex-start;flex-direction:column;gap:.7rem}.results-heading h1{font-size:1.75rem}.results-count{min-height:2.4rem}}
-@media(max-width:34rem){.providers-list{grid-template-columns:1fr}.provider-card{padding:.7rem}.provider-logo-link{aspect-ratio:16/10}.provider-card .provider-avatar{max-width:10rem;max-height:10rem}.provider-card h2{font-size:1.12rem}.provider-card .contact-actions .contact-button{min-height:3.1rem}}
+@media(max-width:34rem){.providers-list{grid-template-columns:1fr}.provider-card{padding:.7rem}.provider-logo-link{aspect-ratio:16/10}.provider-card h2{font-size:1.12rem}.provider-card .contact-actions .contact-button{min-height:3.1rem}}
