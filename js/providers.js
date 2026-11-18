@@ -50,18 +50,24 @@ if (!townId || !categoryId) {
         const profileUrl = `provider.html?id=${encodeURIComponent(provider.id)}&town=${encodeURIComponent(townId)}&category=${encodeURIComponent(categoryId)}${specialtyPart}`;
         const call = phoneHref(provider.phone);
         const whatsapp = whatsappHref(provider.whatsapp || provider.phone);
-        const map = provider.googleMapsUrl || mapsHref(provider.address, town.nameAr);
-        card.innerHTML = `<div class="provider-card-top"><span class="provider-avatar" aria-hidden="true"></span><div class="provider-title"><div><h2></h2><span class="verified-badge" hidden>موثّق</span></div><p></p></div><a class="profile-link" href="${profileUrl}">عرض البروفايل <span aria-hidden="true">←</span></a></div><p class="provider-description"></p><div class="provider-address" hidden><span>العنوان</span><strong></strong></div><div class="contact-actions">${actionLink("اتصال مباشر", call, "call-button")}${actionLink("واتساب", whatsapp, "whatsapp-button", true)}${actionLink("عرض العنوان", map, "map-button", true)}</div>`;
+        const map = provider.googleMapsUrl || (provider.address ? mapsHref(provider.address, town.nameAr) : "");
+        card.innerHTML = `<div class="provider-card-top"><a class="provider-avatar-link" href="${profileUrl}"><span class="provider-avatar" aria-hidden="true"></span></a><div class="provider-title"><div><h2><a class="provider-name-link" href="${profileUrl}"></a></h2><span class="verified-badge" hidden>موثّق</span></div><p></p></div></div><p class="provider-description"></p><div class="provider-details"><div class="provider-phone" hidden><span>رقم التواصل</span><strong dir="ltr"></strong></div><div class="provider-address" hidden><span>العنوان</span><strong></strong></div></div><div class="contact-actions">${actionLink("☎ اتصال مباشر", call, "call-button")}${actionLink("واتساب", whatsapp, "whatsapp-button", true)}${actionLink("عرض الموقع", map, "map-button", true)}</div>`;
         const avatar = card.querySelector(".provider-avatar");
         avatar.textContent = (provider.name || "خ").trim().charAt(0);
         if (provider.imageUrl) {
           avatar.classList.add("has-image");
           avatar.style.backgroundImage = `url(${JSON.stringify(provider.imageUrl)})`;
         }
-        card.querySelector("h2").textContent = provider.name || "مقدّم خدمة";
+        const providerName = provider.name || "مقدّم خدمة";
+        card.querySelector(".provider-name-link").textContent = providerName;
+        card.querySelector(".provider-avatar-link").setAttribute("aria-label", `فتح بروفايل ${providerName}`);
         card.querySelector(".provider-title p").textContent = specialty?.nameAr || category.nameAr;
         card.querySelector(".provider-description").textContent = provider.description || "تواصل مباشرةً للحصول على مزيد من المعلومات.";
         card.querySelector(".verified-badge").hidden = !provider.isVerified;
+        if (provider.phone) {
+          card.querySelector(".provider-phone").hidden = false;
+          card.querySelector(".provider-phone strong").textContent = provider.phone;
+        }
         if (provider.address) {
           card.querySelector(".provider-address").hidden = false;
           card.querySelector(".provider-address strong").textContent = provider.address;
