@@ -32,6 +32,8 @@
     "تحقّق من التفاصيل والسعر قبل الاتفاق. «أنا بدي» يسهّل التواصل ولا يتدخل في المعاملة.":"Confirm details and pricing before agreeing. Ana Bade enables contact but is not part of the transaction.",
     "الإبلاغ عن معلومات غير صحيحة":"Report incorrect information",
     "فتح الموقع":"Open location"
+    ,"مراسلة واتساب":"Message on WhatsApp"
+    ,"اتصل الآن":"Call now"
   });
 
   const patterns = [

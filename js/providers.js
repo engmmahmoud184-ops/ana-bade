@@ -74,7 +74,7 @@ if (!townId || !categoryId) {
         const profileUrl = `provider.html?id=${encodeURIComponent(provider.id)}&town=${encodeURIComponent(townId)}&category=${encodeURIComponent(categoryId)}${specialtyPart}`;
         const call = phoneHref(provider.phone);
         const whatsapp = whatsappHref(provider.whatsapp || provider.phone);
-        card.innerHTML = `<a class="provider-logo-link" href="${profileUrl}"><span class="provider-avatar" aria-hidden="true"></span></a><h2><a class="provider-name-link" href="${profileUrl}"></a></h2><div class="contact-actions">${actionLink("واتساب", whatsapp, "whatsapp-button", whatsappIcon, true)}${actionLink("اتصال", call, "call-button", phoneIcon)}</div>`;
+        card.innerHTML = `<a class="provider-logo-link" href="${profileUrl}"><span class="provider-avatar" aria-hidden="true"></span></a><h2><a class="provider-name-link" href="${profileUrl}"></a></h2><div class="contact-actions">${actionLink("مراسلة واتساب", whatsapp, "whatsapp-button", whatsappIcon, true)}${actionLink("اتصل الآن", call, "call-button", phoneIcon)}</div>`;
         const avatar = card.querySelector(".provider-avatar");
         const providerName = provider.name || "مقدّم خدمة";
         if (provider.imageUrl) {
