@@ -2,7 +2,7 @@ import { getTownById } from "./services/towns-service.js";
 import { getCategoryById } from "./services/categories-service.js";
 import { getSpecialtyById } from "./services/specialties-service.js";
 import { getActiveProviders } from "./services/providers-service.js";
-import { mapsHref, phoneHref, whatsappHref } from "./contact-links.js";
+import { phoneHref, whatsappHref } from "./contact-links.js";
 import { showNotice } from "./ui.js";
 
 const params = new URLSearchParams(location.search);
@@ -11,11 +11,14 @@ const categoryId = params.get("category");
 const specialtyId = params.get("specialty");
 const container = document.querySelector("#providers");
 
-function actionLink(label, href, className, external = false) {
+function actionLink(label, href, className, icon, external = false) {
   if (!href) return "";
   const target = external ? ' target="_blank" rel="noopener"' : "";
-  return `<a class="contact-button ${className}" href="${href}"${target}>${label}</a>`;
+  return `<a class="contact-button ${className}" href="${href}" aria-label="${label}"${target}><span class="contact-icon" aria-hidden="true">${icon}</span><span>${label}</span></a>`;
 }
+
+const phoneIcon = '<svg viewBox="0 0 24 24" focusable="false"><path d="M6.6 10.8c1.7 3.3 3.3 4.9 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.2 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.7 21 3 13.3 3 3.7c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.2 1.1l-2.2 2.2Z"/></svg>';
+const whatsappIcon = '<svg viewBox="0 0 24 24" focusable="false"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.5 4.1 1.6 5.9L.2 24l6.4-1.7c1.7.9 3.6 1.4 5.5 1.4 6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.4-8.4Zm-8.4 18.2c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.8 1 1-3.7-.2-.4a9.8 9.8 0 1 1 8.4 4.7Zm5.4-7.3c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.2-.2.3-.8.9-1 1.1-.2.2-.4.2-.7.1-1.8-.9-3-1.6-4.2-3.7-.3-.5.3-.5.9-1.7.1-.2 0-.4 0-.6l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9 0 1.7 1.2 3.3 1.4 3.5.2.2 2.4 3.7 5.9 5.2.8.4 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.2-.1-.4-.2-.7-.3Z"/></svg>';
 
 if (!townId || !categoryId) {
   showNotice(container, "الاختيارات غير مكتملة.", "ارجع واختر الفئة والمنطقة والبلدة أولاً.", true);
@@ -52,8 +55,7 @@ if (!townId || !categoryId) {
         const profileUrl = `provider.html?id=${encodeURIComponent(provider.id)}&town=${encodeURIComponent(townId)}&category=${encodeURIComponent(categoryId)}${specialtyPart}`;
         const call = phoneHref(provider.phone);
         const whatsapp = whatsappHref(provider.whatsapp || provider.phone);
-        const map = provider.googleMapsUrl || (provider.address ? mapsHref(provider.address, town.nameAr) : "");
-        card.innerHTML = `<div class="provider-card-top"><a class="provider-avatar-link" href="${profileUrl}"><span class="provider-avatar" aria-hidden="true"></span></a><div class="provider-title"><div><h2><a class="provider-name-link" href="${profileUrl}"></a></h2><span class="verified-badge" hidden>موثّق</span></div><p></p></div></div><p class="provider-description"></p><div class="provider-details"><div class="provider-phone" hidden><span>رقم التواصل</span><strong dir="ltr"></strong></div><div class="provider-address" hidden><span>العنوان</span><strong></strong></div></div><div class="contact-actions">${actionLink("☎ اتصال مباشر", call, "call-button")}${actionLink("واتساب", whatsapp, "whatsapp-button", true)}${actionLink("عرض الموقع", map, "map-button", true)}</div>`;
+        card.innerHTML = `<a class="provider-logo-link" href="${profileUrl}"><span class="provider-avatar" aria-hidden="true"></span></a><h2><a class="provider-name-link" href="${profileUrl}"></a></h2><div class="contact-actions">${actionLink("واتساب", whatsapp, "whatsapp-button", whatsappIcon, true)}${actionLink("اتصال", call, "call-button", phoneIcon)}</div>`;
         const avatar = card.querySelector(".provider-avatar");
         avatar.textContent = (provider.name || "خ").trim().charAt(0);
         if (provider.imageUrl) {
@@ -62,18 +64,7 @@ if (!townId || !categoryId) {
         }
         const providerName = provider.name || "مقدّم خدمة";
         card.querySelector(".provider-name-link").textContent = providerName;
-        card.querySelector(".provider-avatar-link").setAttribute("aria-label", `فتح بروفايل ${providerName}`);
-        card.querySelector(".provider-title p").textContent = specialty?.nameAr || category.nameAr;
-        card.querySelector(".provider-description").textContent = provider.description || "تواصل مباشرةً للحصول على مزيد من المعلومات.";
-        card.querySelector(".verified-badge").hidden = !provider.isVerified;
-        if (provider.phone) {
-          card.querySelector(".provider-phone").hidden = false;
-          card.querySelector(".provider-phone strong").textContent = provider.phone;
-        }
-        if (provider.address) {
-          card.querySelector(".provider-address").hidden = false;
-          card.querySelector(".provider-address strong").textContent = provider.address;
-        }
+        card.querySelector(".provider-logo-link").setAttribute("aria-label", `فتح بروفايل ${providerName}`);
         container.append(card);
       });
     }
