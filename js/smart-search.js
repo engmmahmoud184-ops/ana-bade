@@ -95,6 +95,7 @@ function language() {
 }
 
 function itemName(item) {
+  if (item.name) return item.name;
   return language() === "en" ? (item.nameEn || item.nameAr) : (item.nameAr || item.nameEn);
 }
 
@@ -284,15 +285,12 @@ async function loadSearchData() {
     townById = new Map(towns.map(item => [item.id, item]));
     categoryById = new Map(categories.map(item => [item.id, item]));
     townsByVariant = new Map(towns.flatMap(town => townIdVariants(town).map(id => [id, town])));
-    const specialtyById = new Map(specialties.map(item => [item.id, item]));
-
     serviceItems = [
       ...categories.map((item, index) => ({ ...item, type:"category", typeRank:1, defaultRank:40 - index, categoryId:item.id, raw:item, searchText:searchable(`${item.nameAr} ${item.nameEn || ""} ${categoryAliases[item.id] || ""}`) })),
       ...specialties.map(item => ({ ...item, type:"specialty", typeRank:0, defaultRank:25, raw:item, meta:itemName(categoryById.get(item.categoryId) || {}), searchText:searchable(`${item.nameAr} ${item.nameEn || ""} ${specialtyAliases[item.id] || ""}`) })),
       ...providers.map(item => {
         const town = townsByVariant.get(item.townId);
-        const specialtyNames = (item.specialtyIds || []).map(id => specialtyById.get(id)).filter(Boolean).flatMap(entry => [entry.nameAr, entry.nameEn]);
-        return { ...item, type:"provider", typeRank:2, defaultRank:5, raw:item, meta:[town && itemName(town), itemName(categoryById.get(item.categoryId) || {})].filter(Boolean).join(" · "), searchText:searchable(`${item.name || ""} ${item.description || ""} ${specialtyNames.join(" ")}`) };
+        return { ...item, type:"provider", typeRank:2, defaultRank:5, raw:item, meta:[town && itemName(town), itemName(categoryById.get(item.categoryId) || {})].filter(Boolean).join(" · "), searchText:searchable(`${item.name || ""} ${item.description || ""}`) };
       })
     ];
     locationItems = [
