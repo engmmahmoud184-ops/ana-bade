@@ -22,6 +22,25 @@ function addAction(container, label, href, className, external = false) {
   container.append(link);
 }
 
+function stablePalette(value) {
+  let hash = 0;
+  for (const character of value) hash = ((hash << 5) - hash + character.codePointAt(0)) | 0;
+  return (hash >>> 0) % 6;
+}
+
+function createGeneratedProfile(element, name, service) {
+  element.classList.add("generated-profile", `generated-logo-${stablePalette(name)}`);
+  element.textContent = "";
+  const mark = document.createElement("span");
+  mark.className = "generated-logo-mark";
+  mark.textContent = name.trim().charAt(0) || "أ";
+  const title = document.createElement("strong");
+  title.textContent = name;
+  const subtitle = document.createElement("small");
+  subtitle.textContent = service;
+  element.append(mark, title, subtitle);
+}
+
 async function copyProfileUrl(url, status) {
   try {
     await navigator.clipboard.writeText(url);
@@ -54,21 +73,23 @@ if (!providerId) {
       : "index.html";
     document.querySelector("#results-back-link").href = resultsUrl;
     document.title = `${provider.name || "مقدّم خدمة"} | أنا بدي`;
+    const providerName = provider.name || "مقدّم خدمة";
+    const specialtyLabel = selectedSpecialty?.nameAr || "خدمة محلية";
     const profileAvatar = document.querySelector("#profile-avatar");
-    profileAvatar.textContent = (provider.name || "خ").trim().charAt(0);
     if (provider.imageUrl) {
       profileAvatar.classList.add("has-image");
       profileAvatar.style.backgroundImage = `url(${JSON.stringify(provider.imageUrl)})`;
+    } else {
+      createGeneratedProfile(profileAvatar, providerName, specialtyLabel);
     }
-    document.querySelector("#profile-name").textContent = provider.name || "مقدّم خدمة";
-    document.querySelector("#profile-specialty").textContent = selectedSpecialty?.nameAr || "خدمة محلية";
+    document.querySelector("#profile-name").textContent = providerName;
+    document.querySelector("#profile-specialty").textContent = specialtyLabel;
     document.querySelector("#profile-location").textContent = [town?.nameAr, provider.address].filter(Boolean).join(" · ");
     document.querySelector("#profile-description").textContent = provider.description || "تواصل مباشرةً مع مقدّم الخدمة للحصول على مزيد من المعلومات.";
     const profileUrl = new URL("provider.html", location.href);
     profileUrl.searchParams.set("id", providerId);
     const shareUrl = profileUrl.href;
-    const specialtyLabel = selectedSpecialty?.nameAr || "خدمة محلية";
-    const shareText = `${provider.name || "مقدّم خدمة"} — ${specialtyLabel} على دليل أنا بدي`;
+    const shareText = `${providerName} — ${specialtyLabel} على دليل أنا بدي`;
     const metaDescription = document.querySelector('meta[name="description"]');
     metaDescription.content = `${shareText}. تواصل مباشرةً واطّلع على معلومات الخدمة.`;
     let canonical = document.querySelector('link[rel="canonical"]');
@@ -87,6 +108,7 @@ if (!providerId) {
       }
     });
     document.querySelector("#profile-verified").hidden = !provider.isVerified;
+    document.querySelector("#report-profile-link").href = `contact.html?provider=${encodeURIComponent(providerId)}&pageUrl=${encodeURIComponent(shareUrl)}`;
     if (provider.address) {
       document.querySelector("#profile-address-block").hidden = false;
       document.querySelector("#profile-address").textContent = provider.address;
@@ -95,9 +117,14 @@ if (!providerId) {
     specialties.filter(Boolean).forEach(item => { const tag = document.createElement("span"); tag.textContent = item.nameAr; tags.append(tag); });
     if (!tags.children.length) document.querySelector("#profile-specialties-block").hidden = true;
     const actions = document.querySelector("#profile-actions");
-    addAction(actions, `اتصال ${provider.phone || ""}`.trim(), phoneHref(provider.phone), "call-button");
-    addAction(actions, "مراسلة عبر واتساب", whatsappHref(provider.whatsapp || provider.phone), "whatsapp-button", true);
-    addAction(actions, "فتح العنوان على الخريطة", provider.googleMapsUrl || mapsHref(provider.address, town?.nameAr), "map-button", true);
+    const callUrl = phoneHref(provider.phone);
+    const whatsappUrl = whatsappHref(provider.whatsapp || provider.phone);
+    addAction(actions, "واتساب", whatsappUrl, "whatsapp-button", true);
+    addAction(actions, "اتصال", callUrl, "call-button");
+    addAction(actions, "فتح الموقع", provider.googleMapsUrl || mapsHref(provider.address, town?.nameAr), "map-button", true);
+    const mobileActions = document.querySelector("#profile-mobile-actions");
+    addAction(mobileActions, "واتساب", whatsappUrl, "whatsapp-button", true);
+    addAction(mobileActions, "اتصال", callUrl, "call-button");
     loading.hidden = true;
     profile.hidden = false;
   } catch (error) {
