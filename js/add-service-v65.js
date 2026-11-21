@@ -2,7 +2,7 @@ import { getActiveRegions } from "./services/regions-service.js";
 import { getActiveTownsByRegion } from "./services/towns-service.js";
 import { getActiveCategories } from "./services/categories-service.js";
 import { getActiveSpecialtiesByCategory } from "./services/specialties-service.js";
-import { submitProviderRequest } from "./services/provider-requests-service.js";
+import { submitProviderRequest } from "./services/provider-requests-service.js?v=7.3.1";
 import { createPaymentIdentity } from "./payment-reference.js";
 
 const form = document.querySelector("#provider-form");
@@ -96,7 +96,7 @@ form.addEventListener("submit", async event => {
     document.querySelector("#success-reference").textContent=identity.paymentReference;document.querySelector("#success-description").textContent=identity.paymentDescription;
     form.classList.add("hidden"); document.querySelector("#success").classList.remove("hidden");
   } catch (error) {
-    console.error(error); const code=error?.code||"unknown";status.textContent=`لم يُرسل الطلب. رمز الخطأ: ${code}. تأكد من نشر قواعد الأمان الخاصة بالنسخة 7.1.`; button.disabled = false;
+    console.error(error); const code=error?.code||"unknown";status.textContent=`لم يُرسل الطلب. رمز الخطأ: ${code}. حدّث الصفحة وحاول مجدداً، وإذا استمر الخطأ فتأكد من نشر أحدث قواعد Firestore وStorage.`; button.disabled = false;
   }
 });
 
