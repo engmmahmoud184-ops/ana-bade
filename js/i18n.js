@@ -50,6 +50,9 @@
     ,"الموقع الرسمي وحسابات التواصل التي أضافها صاحب البزنس.":"The official website and social accounts added by the business owner."
     ,"زيارة الموقع الإلكتروني":"Visit website"
     ,"إرسال بريد إلكتروني":"Send email"
+    ,"ابحث":"Search"
+    ,"مندوب":"Agent"
+    ,"سجّل":"List"
   });
 
   const patterns = [
