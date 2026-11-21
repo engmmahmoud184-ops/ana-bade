@@ -58,7 +58,7 @@ if (!townId || !categoryId) {
     document.querySelector("#towns-link").href = townsUrl;
     document.querySelector("#categories-link").href = categoriesUrl;
     document.querySelector("#specialties-link").href = specialtiesUrl;
-    document.querySelector("#specialties-back-link").href = specialtiesUrl;
+    document.querySelector("#specialties-back-link")?.setAttribute("href", specialtiesUrl);
     const serviceLabel = localizedName(specialty || category), townName = localizedName(town);
     document.querySelector("#providers-title").textContent = isEnglish() ? `${serviceLabel} in ${townName}` : `${serviceLabel} في ${townName}`;
     document.querySelector("#providers-subtitle").textContent = isEnglish() ? "Choose a provider and contact them directly." : "اختار مقدم الخدمة وتواصل معه مباشرة.";
@@ -92,6 +92,6 @@ if (!townId || !categoryId) {
     }
   } catch (error) {
     console.error(error);
-    showNotice(container, "ما قدرنا نحمّل مقدّمي الخدمة.", "تحقّق من الإنترنت ومن Firestore Security Rules ثم حاول مجدداً.", true);
+    showNotice(container, isEnglish() ? "We could not load the providers." : "ما قدرنا نحمّل مقدّمي الخدمة.", isEnglish() ? "Please refresh the page and try again." : "حدّث الصفحة وحاول مجدداً.", true);
   }
 }

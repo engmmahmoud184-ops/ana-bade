@@ -24,7 +24,7 @@ if (!townId || !categoryId) {
     const categoriesUrl = `categories.html?town=${encodeURIComponent(townId)}`;
     document.querySelector("#towns-link").href = townsUrl;
     document.querySelector("#categories-link").href = categoriesUrl;
-    document.querySelector("#categories-back-link").href = categoriesUrl;
+    document.querySelector("#categories-back-link")?.setAttribute("href", categoriesUrl);
     const townName = localizedName(town), categoryName = localizedName(category);
     document.querySelector("#category-breadcrumb").textContent = categoryName;
     document.querySelector("#selected-town").textContent = townName;

@@ -122,7 +122,7 @@ if (!providerId) {
     const resultsUrl = townId && categoryId
       ? `providers.html?town=${encodeURIComponent(townId)}&category=${encodeURIComponent(categoryId)}${specialtyId ? `&specialty=${encodeURIComponent(specialtyId)}` : ""}`
       : "index.html";
-    document.querySelector("#results-back-link").href = resultsUrl;
+    document.querySelector("#results-back-link")?.setAttribute("href", resultsUrl);
     document.title = `${provider.name || "مقدّم خدمة"} | أنا بدي`;
     const providerName = provider.name || "مقدّم خدمة";
     const specialtyLabel = localizedName(selectedSpecialty) || (isEnglish() ? "Local service" : "خدمة محلية");

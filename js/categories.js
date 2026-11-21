@@ -21,7 +21,7 @@ if (!townId) {
     }, {});
 
     const townsUrl = `towns.html?region=${encodeURIComponent(town.regionId)}`;
-    document.querySelector("#towns-back-link").href = townsUrl;
+    document.querySelector("#towns-back-link")?.setAttribute("href", townsUrl);
     document.querySelector("#town-breadcrumb-link").href = townsUrl;
     const townName = localizedName(town);
     document.querySelector("#town-breadcrumb").textContent = townName;
