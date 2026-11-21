@@ -91,12 +91,18 @@
     const lang = language(); document.documentElement.lang = lang; document.documentElement.dir = lang === "en" ? "ltr" : "rtl";
     document.body.classList.toggle("language-en", lang === "en");
     const isAdminPage = /(?:^|\/)admin(?:-|\.)/.test(location.pathname);
+    document.body.classList.toggle("public-inner-page", !isAdminPage && !document.body.classList.contains("home-page"));
     document.querySelectorAll(".legal-footer").forEach(footer => {
       footer.innerHTML = isAdminPage ? compactFooterHtml : footerHtml;
       footer.classList.toggle("site-footer", !isAdminPage);
     });
     translateTree(document.body);
     const header = document.querySelector(".site-header");
+    if (header && !isAdminPage && document.body.classList.contains("public-inner-page") && !header.querySelector(".header-actions")) {
+      const actions = document.createElement("div"); actions.className = "header-actions inner-header-actions";
+      const backLink = header.querySelector(".back-link"); if (backLink) actions.append(backLink);
+      header.append(actions);
+    }
     if (header && !document.querySelector(".language-toggle")) {
       const button = document.createElement("button"); button.type = "button"; button.className = "language-toggle";
       button.textContent = lang === "en" ? "العربية" : "English"; button.setAttribute("aria-label", lang === "en" ? "Switch to Arabic" : "التبديل إلى الإنجليزية");
