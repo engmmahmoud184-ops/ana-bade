@@ -10,6 +10,8 @@ const townId = params.get("town");
 const categoryId = params.get("category");
 const specialtyId = params.get("specialty");
 const container = document.querySelector("#providers");
+const localizedName = item => window.AnaBadeI18n?.name(item) || item?.nameAr || item?.nameEn || "";
+const isEnglish = () => window.AnaBadeI18n?.language() === "en";
 
 function actionLink(label, href, className, icon, external = false) {
   if (!href) return "";
@@ -57,10 +59,10 @@ if (!townId || !categoryId) {
     document.querySelector("#categories-link").href = categoriesUrl;
     document.querySelector("#specialties-link").href = specialtiesUrl;
     document.querySelector("#specialties-back-link").href = specialtiesUrl;
-    const serviceLabel = specialty?.nameAr || category.nameAr;
-    document.querySelector("#providers-title").textContent = `${serviceLabel} في ${town.nameAr}`;
-    document.querySelector("#providers-subtitle").textContent = "اختار مقدم الخدمة وتواصل معه مباشرة.";
-    document.querySelector("#providers-count").textContent = `${providers.length.toLocaleString("en-US")} ${providers.length === 1 ? "خيار متاح" : "خيارات متاحة"}`;
+    const serviceLabel = localizedName(specialty || category), townName = localizedName(town);
+    document.querySelector("#providers-title").textContent = isEnglish() ? `${serviceLabel} in ${townName}` : `${serviceLabel} في ${townName}`;
+    document.querySelector("#providers-subtitle").textContent = isEnglish() ? "Choose a provider and contact them directly." : "اختار مقدم الخدمة وتواصل معه مباشرة.";
+    document.querySelector("#providers-count").textContent = `${providers.length.toLocaleString("en-US")} ${isEnglish() ? (providers.length === 1 ? "option available" : "options available") : (providers.length === 1 ? "خيار متاح" : "خيارات متاحة")}`;
     container.innerHTML = "";
     container.removeAttribute("aria-busy");
 
@@ -74,14 +76,14 @@ if (!townId || !categoryId) {
         const profileUrl = `provider.html?id=${encodeURIComponent(provider.id)}&town=${encodeURIComponent(townId)}&category=${encodeURIComponent(categoryId)}${specialtyPart}`;
         const call = phoneHref(provider.phone);
         const whatsapp = whatsappHref(provider.whatsapp || provider.phone);
-        card.innerHTML = `<a class="provider-logo-link" href="${profileUrl}"><span class="provider-avatar" aria-hidden="true"></span></a><h2><a class="provider-name-link" href="${profileUrl}"></a></h2><div class="contact-actions">${actionLink("مراسلة واتساب", whatsapp, "whatsapp-button", whatsappIcon, true)}${actionLink("اتصل الآن", call, "call-button", phoneIcon)}</div>`;
+        card.innerHTML = `<a class="provider-logo-link" href="${profileUrl}"><span class="provider-avatar" aria-hidden="true"></span></a><h2><a class="provider-name-link" href="${profileUrl}"></a></h2><div class="contact-actions">${actionLink(isEnglish() ? "Message on WhatsApp" : "مراسلة واتساب", whatsapp, "whatsapp-button", whatsappIcon, true)}${actionLink(isEnglish() ? "Call now" : "اتصل الآن", call, "call-button", phoneIcon)}</div>`;
         const avatar = card.querySelector(".provider-avatar");
         const providerName = provider.name || "مقدّم خدمة";
         if (provider.imageUrl) {
           avatar.classList.add("has-image");
           avatar.style.backgroundImage = `url(${JSON.stringify(provider.imageUrl)})`;
         } else {
-          createGeneratedLogo(avatar, providerName, specialty?.nameAr || category.nameAr);
+          createGeneratedLogo(avatar, providerName, serviceLabel);
         }
         card.querySelector(".provider-name-link").textContent = providerName;
         card.querySelector(".provider-logo-link").setAttribute("aria-label", `فتح بروفايل ${providerName}`);

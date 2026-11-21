@@ -6,6 +6,7 @@ import { showNotice } from "./ui.js";
 const params = new URLSearchParams(location.search);
 const townId = params.get("town");
 const container = document.querySelector("#categories");
+const localizedName = item => window.AnaBadeI18n?.name(item) || item?.nameAr || item?.nameEn || "";
 
 if (!townId) {
   showNotice(container, "لم يتم اختيار بلدة.", "ارجع إلى المناطق واختر المنطقة ثم البلدة.", true);
@@ -22,9 +23,10 @@ if (!townId) {
     const townsUrl = `towns.html?region=${encodeURIComponent(town.regionId)}`;
     document.querySelector("#towns-back-link").href = townsUrl;
     document.querySelector("#town-breadcrumb-link").href = townsUrl;
-    document.querySelector("#town-breadcrumb").textContent = town.nameAr;
-    document.querySelector("#selected-town").textContent = town.nameAr;
-    document.querySelector("#categories-subtitle").textContent = `اختار الفئة المناسبة ضمن ${town.nameAr}.`;
+    const townName = localizedName(town);
+    document.querySelector("#town-breadcrumb").textContent = townName;
+    document.querySelector("#selected-town").textContent = townName;
+    document.querySelector("#categories-subtitle").textContent = `اختار الفئة المناسبة ضمن ${townName}.`;
     container.innerHTML = "";
     container.removeAttribute("aria-busy");
 
@@ -35,11 +37,12 @@ if (!townId) {
         const link = document.createElement("a");
         link.className = "category-card";
         link.href = `specialties.html?town=${encodeURIComponent(townId)}&category=${encodeURIComponent(category.id)}`;
-        link.setAttribute("aria-label", `اختيار ${category.nameAr}`);
+        const categoryName = localizedName(category);
+        link.setAttribute("aria-label", `اختيار ${categoryName}`);
         link.innerHTML = `<span class="category-symbol" aria-hidden="true"></span><span class="category-copy"><small>فئة ${String(index + 1).padStart(2, "0")}</small><strong></strong><span lang="en" dir="ltr"></span><b class="provider-count-badge"></b></span><span class="category-arrow" aria-hidden="true">←</span>`;
-        link.querySelector(".category-symbol").textContent = category.nameAr?.trim().charAt(0) || "•";
-        link.querySelector("strong").textContent = category.nameAr;
-        link.querySelector(".category-copy > span").textContent = category.nameEn || "";
+        link.querySelector(".category-symbol").textContent = categoryName.trim().charAt(0) || "•";
+        link.querySelector("strong").textContent = categoryName;
+        link.querySelector(".category-copy > span").textContent = window.AnaBadeI18n?.language() === "en" ? (category.nameAr || "") : (category.nameEn || "");
         link.querySelector(".provider-count-badge").textContent = `${(counts[category.id] || 0).toLocaleString("en-US")} مسجّل`;
         container.append(link);
       });

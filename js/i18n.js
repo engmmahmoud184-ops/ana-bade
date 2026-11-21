@@ -17,7 +17,7 @@
     "المعلومات التي نجمعها":"Information we collect","كيف نستخدمها":"How we use it","الحفظ والمشاركة":"Storage and sharing","حقوقك":"Your rights","مراجع عامة":"General references","الاستخدام المقبول":"Acceptable use","دقة المعلومات":"Information accuracy","المعاملات والنزاعات":"Transactions and disputes","التغييرات":"Changes","الدليل وسيط معلوماتي":"The directory is an information intermediary","مسؤولية الاختيار":"Responsibility for choosing","البلاغات والتواصل":"Reports and contact",
     "عند تقديم طلب لإضافة خدمة أو إرسال بلاغ، قد نجمع الاسم ورقم الهاتف أو وسيلة التواصل والعنوان والوصف والمعلومات التي تدخلها طوعاً. لا نطلب معلومات مصرفية أو وثائق هوية.":"When you submit a listing or report, we may collect the name, phone or contact details, address, description, and information you provide voluntarily. We do not request banking information or identity documents.","حماية الدليل وتحسين جودة المعلومات.":"Protecting the directory and improving information quality.","التواصل عند الحاجة لتصحيح البيانات أو معالجة البلاغ.":"Contacting you when needed to correct data or process a report.","تُحفظ البيانات عبر بنية سحابية محمية ومزوّدي خدمات تقنيين موثوقين. لا نبيع البيانات الشخصية. قد تظهر معلومات مقدم الخدمة المنشورة، مثل الاسم والهاتف والعنوان ورابط Google Maps، لجميع زوار الدليل بعد موافقة الإدارة. يُستخدم رمز المندوب وحالة الدفع داخلياً للإدارة والمحاسبة ولا يظهران للعامة.":"Data is stored through protected cloud infrastructure and trusted technology providers. We do not sell personal data. Approved provider details, including name, phone number, address, and Google Maps link, may be visible to visitors. Referral codes and payment status are used internally and are not public.","يمكنك طلب تصحيح معلوماتك أو إزالتها عبر صفحة التواصل. سنطلب ما يكفي للتحقق من علاقتك بالسجل قبل تنفيذ الطلب.":"You may request correction or removal of your information through the contact page. We may request sufficient verification before acting.","يُمنع إرسال بيانات كاذبة، انتحال صفة الغير، الإساءة، الاحتيال، جمع بيانات الآخرين آلياً، أو محاولة تعطيل الموقع أو تجاوز حمايته.":"Submitting false information, impersonation, abuse, fraud, automated data collection, disrupting the website, or bypassing its protections is prohibited.","على مقدم الخدمة إدخال معلومات صحيحة ومحدثة، وعلى المستخدم التحقق منها قبل الاتفاق. يحق للإدارة تعديل أو تعطيل أو رفض أي سجل يبدو مضللاً أو مخالفاً.":"Providers must submit accurate, current information, and users must verify it before any agreement. The administration may edit, disable, or reject misleading or non-compliant listings.","لا يستلم الموقع المدفوعات ولا يتدخل في العقود بين الأطراف. أي اتفاق أو خسارة أو نزاع ينشأ مباشرة بين المستخدم ومقدم الخدمة.":"The website does not receive payments or participate in contracts. Any agreement, loss, or dispute is directly between the user and provider.","قد نحدّث هذه الشروط مع تطور الخدمة. استمرار استخدام الموقع بعد نشر التحديث يعني قبول النسخة الجديدة.":"We may update these terms as the service evolves. Continued use after publication means acceptance of the updated version.","يعرض «أنا بدي» معلومات تواصل لتسهيل الوصول ولا يضمن جودة الخدمة أو أسعارها أو توفرها أو نتائجها.":"Ana Bade displays contact information to make providers easier to reach, but does not guarantee service quality, pricing, availability, or results.","يتحمل المستخدم مسؤولية التحقق من الهوية والخبرة والتراخيص والسعر وشروط التنفيذ قبل أي اتفاق، خصوصاً في الخدمات الطبية والقانونية والمالية وأعمال السلامة.":"Users are responsible for verifying identity, experience, licenses, pricing, and terms before any agreement, especially for medical, legal, financial, and safety-related services.","إذا وجدت معلومات خاطئة أو نشاطاً مشبوهاً، أرسل بلاغاً وسنراجعه. التوثيق داخل الموقع لا يُعد ضماناً أو توصية مطلقة.":"If you find incorrect information or suspicious activity, submit a report for review. Verification on the website is not an absolute guarantee or endorsement."
   };
-  Object.assign(dictionary, {
+  Object.assign(translations, {
     "تمت مراجعة بيانات التواصل":"Contact details reviewed",
     "عن مقدم الخدمة":"About the provider",
     "نبذة عن الخدمة":"About this service",
@@ -53,6 +53,37 @@
     ,"ابحث":"Search"
     ,"مندوب":"Agent"
     ,"سجّل":"List"
+    ,"الصفحة الرئيسية":"Home"
+    ,"بوابة المندوب":"Referral portal"
+    ,"تسجيلاتك":"Your registrations"
+    ,"تابع الأشخاص والبزنس الذين سجلوا باستعمال رمزك.":"Track the people and businesses registered with your code."
+    ,"تسجيل الدخول":"Sign in"
+    ,"البريد الإلكتروني":"Email"
+    ,"كلمة المرور":"Password"
+    ,"دخول":"Sign in"
+    ,"رمزك:":"Your code:"
+    ,"تحديث":"Refresh"
+    ,"تسجيل الخروج":"Sign out"
+    ,"إجمالي التسجيلات":"Total registrations"
+    ,"مقبولة":"Approved"
+    ,"بانتظار المراجعة":"Pending review"
+    ,"المدفوع لك":"Paid to you"
+    ,"الأسماء المسجلة على رمزك":"Registrations using your code"
+    ,"ابحث بالاسم أو الحالة":"Search by name or status"
+    ,"الدفعات المسجلة لك":"Payments recorded for you"
+    ,"لوحة الإدارة":"Admin dashboard"
+    ,"عرض الموقع":"View website"
+    ,"الطلبات":"Requests"
+    ,"البلاغات":"Reports"
+    ,"المسجّلون":"Providers"
+    ,"المبالغ المقبوضة":"Collections"
+    ,"المندوبون":"Referrals"
+    ,"المناطق والبلدات":"Regions and towns"
+    ,"بحث متقدم":"Advanced search"
+    ,"الحالة":"Status"
+    ,"الكل":"All"
+    ,"فعّال":"Active"
+    ,"غير فعّال":"Inactive"
   });
 
   const patterns = [
@@ -99,14 +130,14 @@
     translateTree(document.body);
     const header = document.querySelector(".site-header");
     if (header && !isAdminPage && document.body.classList.contains("public-inner-page")) {
-      header.innerHTML = '<a class="brand" href="index.html" aria-label="أنا بدي - الصفحة الرئيسية"><span class="brand-mark" aria-hidden="true">أ</span><span class="brand-name">أنا بدي <small lang="en">Ana Bade</small></span></a><nav class="main-nav" aria-label="التنقل الرئيسي"><a href="index.html#smart-search-title"><span class="nav-icon" aria-hidden="true">⌕</span>ابحث</a><a href="index.html#popular-title"><span class="nav-icon" aria-hidden="true">▦</span>الخدمات</a><a href="index.html#regions-title"><span class="nav-icon" aria-hidden="true">⌖</span>المناطق</a></nav><div class="header-actions"><a class="referral-login-link" href="referral.html"><span class="desktop-label">دخول المندوب</span><span class="mobile-label">مندوب</span></a><a class="header-cta" href="add-service.html"><span class="header-cta-icon" aria-hidden="true">＋</span><span class="desktop-label">أضف خدمتك</span><span class="mobile-label">سجّل</span></a></div>';
+      header.innerHTML = '<a class="brand" href="index.html" aria-label="أنا بدي - الصفحة الرئيسية"><span class="brand-mark" aria-hidden="true">أ</span><span class="brand-name">أنا بدي <small lang="en">Ana Bade</small></span></a><nav class="main-nav" aria-label="التنقل الرئيسي"><a href="index.html#smart-search-title"><span class="nav-icon" aria-hidden="true">⌕</span>ابحث</a><a href="index.html#popular-title"><span class="nav-icon" aria-hidden="true">▦</span>الخدمات</a><a href="index.html#regions-title"><span class="nav-icon" aria-hidden="true">⌖</span>المناطق</a></nav><div class="header-actions"><a class="referral-login-link" href="referral.html"><span class="desktop-label">دخول المندوب</span><span class="mobile-label">مندوب</span></a><a class="header-cta" href="add-service.html"><span class="header-cta-icon" aria-hidden="true">＋</span><span class="desktop-label">أضف خدمتك</span><span class="mobile-label">سجّل</span></a><button class="language-toggle" type="button" aria-label="التبديل إلى الإنجليزية">English</button></div>';
       translateTree(header);
     }
-    if (header && !document.querySelector(".language-toggle")) {
-      const button = document.createElement("button"); button.type = "button"; button.className = "language-toggle";
+    if (header) {
+      let button = header.querySelector(".language-toggle");
+      if (!button) { button = document.createElement("button"); button.type = "button"; button.className = "language-toggle"; const actions = header.querySelector(".header-actions"); (actions || header).append(button); }
       button.textContent = lang === "en" ? "العربية" : "English"; button.setAttribute("aria-label", lang === "en" ? "Switch to Arabic" : "التبديل إلى الإنجليزية");
       button.addEventListener("click", () => { localStorage.setItem("anaBadeLanguage", lang === "en" ? "ar" : "en"); location.reload(); });
-      const actions = header.querySelector(".header-actions"); (actions || header).append(button);
     }
     new MutationObserver(records => records.forEach(record => {
       if (record.type === "characterData") { const fixed = translateText(record.target.nodeValue); if (fixed !== record.target.nodeValue) record.target.nodeValue = fixed; return; }

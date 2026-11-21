@@ -7,6 +7,7 @@ const params = new URLSearchParams(location.search);
 const townId = params.get("town");
 const categoryId = params.get("category");
 const container = document.querySelector("#specialties");
+const localizedName = item => window.AnaBadeI18n?.name(item) || item?.nameAr || item?.nameEn || "";
 
 if (!townId || !categoryId) {
   showNotice(container, "الاختيارات غير مكتملة.", "ارجع واختر البلدة وفئة الخدمة أولاً.", true);
@@ -24,10 +25,11 @@ if (!townId || !categoryId) {
     document.querySelector("#towns-link").href = townsUrl;
     document.querySelector("#categories-link").href = categoriesUrl;
     document.querySelector("#categories-back-link").href = categoriesUrl;
-    document.querySelector("#category-breadcrumb").textContent = category.nameAr;
-    document.querySelector("#selected-town").textContent = town.nameAr;
-    document.querySelector("#selected-category").textContent = category.nameAr;
-    document.querySelector("#specialties-subtitle").textContent = `اختار الاختصاص المناسب ضمن ${category.nameAr}.`;
+    const townName = localizedName(town), categoryName = localizedName(category);
+    document.querySelector("#category-breadcrumb").textContent = categoryName;
+    document.querySelector("#selected-town").textContent = townName;
+    document.querySelector("#selected-category").textContent = categoryName;
+    document.querySelector("#specialties-subtitle").textContent = `اختار الاختصاص المناسب ضمن ${categoryName}.`;
     container.innerHTML = "";
     container.removeAttribute("aria-busy");
 
@@ -38,11 +40,12 @@ if (!townId || !categoryId) {
         const link = document.createElement("a");
         link.className = "specialty-row";
         link.href = `providers.html?town=${encodeURIComponent(townId)}&category=${encodeURIComponent(categoryId)}&specialty=${encodeURIComponent(specialty.id)}`;
-        link.setAttribute("aria-label", `اختيار ${specialty.nameAr}`);
+        const specialtyName = localizedName(specialty);
+        link.setAttribute("aria-label", `اختيار ${specialtyName}`);
         link.innerHTML = `<span class="specialty-index"></span><span class="specialty-copy"><strong></strong><small lang="en" dir="ltr"></small></span><span class="specialty-action">عرض النتائج <b aria-hidden="true">←</b></span>`;
         link.querySelector(".specialty-index").textContent = String(index + 1).padStart(2, "0");
-        link.querySelector("strong").textContent = specialty.nameAr;
-        link.querySelector("small").textContent = specialty.nameEn || "";
+        link.querySelector("strong").textContent = specialtyName;
+        link.querySelector("small").textContent = window.AnaBadeI18n?.language() === "en" ? (specialty.nameAr || "") : (specialty.nameEn || "");
         container.append(link);
       });
     }

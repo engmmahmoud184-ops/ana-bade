@@ -11,6 +11,8 @@ const categoryId = params.get("category");
 const specialtyId = params.get("specialty");
 const loading = document.querySelector("#profile-loading");
 const profile = document.querySelector("#provider-profile");
+const localizedName = item => window.AnaBadeI18n?.name(item) || item?.nameAr || item?.nameEn || "";
+const isEnglish = () => window.AnaBadeI18n?.language() === "en";
 
 function addAction(container, label, href, className, icon = "", external = false) {
   if (!href) return;
@@ -123,7 +125,7 @@ if (!providerId) {
     document.querySelector("#results-back-link").href = resultsUrl;
     document.title = `${provider.name || "مقدّم خدمة"} | أنا بدي`;
     const providerName = provider.name || "مقدّم خدمة";
-    const specialtyLabel = selectedSpecialty?.nameAr || "خدمة محلية";
+    const specialtyLabel = localizedName(selectedSpecialty) || (isEnglish() ? "Local service" : "خدمة محلية");
     const profileAvatar = document.querySelector("#profile-avatar");
     if (provider.imageUrl) {
       profileAvatar.classList.add("has-image");
@@ -133,8 +135,8 @@ if (!providerId) {
     }
     document.querySelector("#profile-name").textContent = providerName;
     document.querySelector("#profile-specialty").textContent = specialtyLabel;
-    document.querySelector("#profile-location").textContent = [town?.nameAr, provider.address].filter(Boolean).join(" · ");
-    document.querySelector("#profile-description").textContent = provider.description || "تواصل مباشرةً مع مقدّم الخدمة للحصول على مزيد من المعلومات.";
+    document.querySelector("#profile-location").textContent = [localizedName(town), provider.address].filter(Boolean).join(" · ");
+    document.querySelector("#profile-description").textContent = provider.description || (isEnglish() ? "Contact the provider directly for more information." : "تواصل مباشرةً مع مقدّم الخدمة للحصول على مزيد من المعلومات.");
     const profileUrl = new URL("provider.html", location.href);
     profileUrl.searchParams.set("id", providerId);
     const shareUrl = profileUrl.href;
@@ -163,7 +165,7 @@ if (!providerId) {
       document.querySelector("#profile-address").textContent = provider.address;
     }
     const tags = document.querySelector("#profile-specialties");
-    specialties.filter(Boolean).forEach(item => { const tag = document.createElement("span"); tag.textContent = item.nameAr; tags.append(tag); });
+    specialties.filter(Boolean).forEach(item => { const tag = document.createElement("span"); tag.textContent = localizedName(item); tags.append(tag); });
     if (!tags.children.length) document.querySelector("#profile-specialties-block").hidden = true;
     const webLinks = document.querySelector("#profile-web-links");
     const socialLinks = document.querySelector("#profile-social-links");

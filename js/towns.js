@@ -11,6 +11,7 @@ const container = document.querySelector("#towns");
 const input = document.querySelector("#town-search");
 let towns = [];
 let providerCounts = {};
+const localizedName = item => window.AnaBadeI18n?.name(item) || item?.nameAr || item?.nameEn || "";
 
 function render(filter = "") {
   const needle = normalizeSearch(filter);
@@ -27,8 +28,8 @@ function render(filter = "") {
     link.className = "town-row";
     link.href = categoryId ? `providers.html?town=${encodeURIComponent(town.id)}&category=${encodeURIComponent(categoryId)}${specialtyId ? `&specialty=${encodeURIComponent(specialtyId)}` : ""}` : `categories.html?town=${encodeURIComponent(town.id)}`;
     link.innerHTML = `<span><strong></strong><small lang="en" dir="ltr"></small><b class="provider-count-badge"></b></span><span class="arrow" aria-hidden="true">←</span>`;
-    link.querySelector("strong").textContent = town.nameAr;
-    link.querySelector("small").textContent = town.nameEn || "";
+    link.querySelector("strong").textContent = localizedName(town);
+    link.querySelector("small").textContent = window.AnaBadeI18n?.language() === "en" ? (town.nameAr || "") : (town.nameEn || "");
     link.querySelector(".provider-count-badge").textContent = `${(providerCounts[town.id] || 0).toLocaleString("en-US")} مسجّل`;
     container.append(link);
   });
@@ -48,7 +49,7 @@ if (!regionId) {
       if (currentTownId) result[currentTownId] = (result[currentTownId] || 0) + 1;
       return result;
     }, {});
-    const regionName = region?.nameAr || "المنطقة";
+    const regionName = localizedName(region) || "المنطقة";
     document.querySelector("#region-breadcrumb").textContent = regionName;
     document.querySelector("#towns-subtitle").textContent = `كل البلدات الفعّالة ضمن ${regionName}.`;
     document.querySelector("#town-count").textContent = `${towns.length.toLocaleString("en-US")} بلدة`;
