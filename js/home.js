@@ -1,11 +1,15 @@
 import { db } from "./firebase.js";
 import { collection, doc, getDocs, query, runTransaction, serverTimestamp, where } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 import { getAllActiveTowns } from "./services/towns-service.js";
+import { getAllActiveSpecialties } from "./services/specialties-service.js";
 import { townIdVariants } from "./services/providers-service.js";
 
 const providersStat = document.querySelector("#providers-stat");
 const visitsStat = document.querySelector("#visits-stat");
+const searchExamples = document.querySelector("#search-examples");
 const numberFormatter = new Intl.NumberFormat("en-US", { useGrouping: true });
+const isEnglish = () => window.AnaBadeI18n?.language() === "en";
+const localizedName = item => window.AnaBadeI18n?.name(item) || item?.nameAr || item?.nameEn || "";
 
 function westernNumber(value) {
   return numberFormatter.format(Number(value) || 0).replace(/[٠-٩]/g, digit => "0123456789"["٠١٢٣٤٥٦٧٨٩".indexOf(digit)]);
@@ -14,8 +18,44 @@ function westernNumber(value) {
 async function loadProviderCount() {
   const activeProviders = query(collection(db, "providers"), where("isActive", "==", true));
   const snapshot = await getDocs(activeProviders);
+  const providers = snapshot.docs.map(item => ({ id:item.id, ...item.data() }));
   providersStat.textContent = westernNumber(snapshot.size);
-  await loadRegionCounts(snapshot.docs.map(item => ({ id: item.id, ...item.data() })));
+  await Promise.all([loadRegionCounts(providers), loadPopularExamples(providers)]);
+}
+
+async function loadPopularExamples(providers) {
+  const [towns, specialties] = await Promise.all([getAllActiveTowns(), getAllActiveSpecialties()]);
+  const townByVariant = new Map(towns.flatMap(town => townIdVariants(town).map(id => [id, town])));
+  const specialtyById = new Map(specialties.map(item => [item.id, item]));
+  const combinations = new Map();
+  providers.forEach(provider => {
+    const town = townByVariant.get(provider.townId);
+    if (!town) return;
+    (provider.specialtyIds || []).forEach(specialtyId => {
+      const specialty = specialtyById.get(specialtyId);
+      if (!specialty) return;
+      const key = `${town.id}::${specialtyId}`;
+      const current = combinations.get(key) || { town, specialty, categoryId:provider.categoryId, count:0 };
+      current.count += 1;
+      combinations.set(key, current);
+    });
+  });
+  const examples = [...combinations.values()].sort((a, b) => b.count - a.count || localizedName(a.specialty).localeCompare(localizedName(b.specialty), isEnglish() ? "en" : "ar")).slice(0, 4);
+  if (!examples.length) return;
+  searchExamples.replaceChildren();
+  const label = document.createElement("span");
+  label.textContent = isEnglish() ? "Try:" : "جرّب:";
+  searchExamples.append(label);
+  examples.forEach(({ town, specialty, categoryId, count }) => {
+    const link = document.createElement("a");
+    link.href = `providers.html?town=${encodeURIComponent(town.id)}&category=${encodeURIComponent(categoryId)}&specialty=${encodeURIComponent(specialty.id)}`;
+    link.textContent = isEnglish() ? `${localizedName(specialty)} in ${localizedName(town)}` : `${localizedName(specialty)} في ${localizedName(town)}`;
+    const badge = document.createElement("b");
+    badge.className = "example-count";
+    badge.textContent = westernNumber(count);
+    link.append(badge);
+    searchExamples.append(link);
+  });
 }
 
 async function loadRegionCounts(providers) {

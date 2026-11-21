@@ -226,8 +226,9 @@ footer{color:var(--muted)}
 .smart-suggestion-empty{padding:.9rem;color:var(--muted);text-align:center;font-size:.82rem}
 .smart-search-status{min-height:1.5rem;margin:.65rem .25rem 0;color:var(--muted);font-size:.76rem}.smart-search-status.is-error{color:var(--danger)}
 .search-examples{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;margin:.35rem .25rem 0;color:var(--muted);font-size:.72rem}
-.search-examples button{padding:.28rem .55rem;color:var(--brand);background:transparent;border:1px solid #cfe0d6;border-radius:999px;font:inherit;font-weight:700;cursor:pointer}
-.search-examples button:hover{color:#fff;background:var(--brand);border-color:var(--brand)}
+.search-examples button,.search-examples a{display:inline-flex;align-items:center;gap:.35rem;padding:.28rem .55rem;color:var(--brand);background:transparent;border:1px solid #cfe0d6;border-radius:999px;font:inherit;font-weight:700;text-decoration:none;cursor:pointer}
+.search-examples button:hover,.search-examples a:hover{color:#fff;background:var(--brand);border-color:var(--brand)}
+.example-count{display:grid;min-width:1.25rem;height:1.25rem;padding:0 .25rem;place-items:center;color:var(--brand-dark);background:var(--lime);border-radius:999px;font-size:.62rem;line-height:1}
 .language-en .smart-search-copy{text-align:left}.language-en .smart-search-submit span{display:inline-block;transform:scaleX(-1)}
 @media(max-width:62rem){.smart-search-copy{align-items:start;flex-direction:column;gap:.35rem}.search-sentence{grid-template-columns:auto minmax(0,1fr) auto minmax(0,1fr)}.smart-search-submit{grid-column:1/-1;width:100%}}
 @media(max-width:42rem){.smart-search{margin-top:.75rem;padding:1.1rem;border-radius:1.1rem}.smart-search-copy{margin-bottom:.9rem}.smart-search-copy h2{font-size:1.65rem}.smart-search-copy>p:last-child{font-size:.88rem}.search-sentence{grid-template-columns:auto minmax(0,1fr);gap:.5rem;padding:.55rem}.smart-combobox{width:100%}.smart-combobox input{height:3.25rem;font-size:.9rem}.smart-search-submit{min-height:3.2rem}.search-examples{margin-top:.5rem}.smart-suggestions{position:fixed;z-index:100;inset:auto .75rem .75rem;max-height:min(24rem,55vh);border-radius:1rem}.sentence-word{font-size:1rem}}
