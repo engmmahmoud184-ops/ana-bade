@@ -344,3 +344,8 @@ footer{color:var(--muted)}
 :is(.home-page,.public-inner-page) .language-toggle{background:#fff;border-color:var(--line)}
 @media(max-width:64rem){:is(.home-page,.public-inner-page) .brand-mark{width:7rem}}
 @media(max-width:42rem){:is(.home-page,.public-inner-page) .site-header{min-height:4.65rem;padding:.45rem}:is(.home-page,.public-inner-page) .brand-mark{width:5.8rem;height:3rem}:is(.home-page,.public-inner-page) .header-cta{min-height:2.55rem;padding-inline:.65rem}}
+
+/* v9.7 fixed full-width navigation inspired by marketplace headers. */
+:is(.home-page,.public-inner-page) .site-shell{padding-top:6.2rem}
+:is(.home-page,.public-inner-page) .site-header{position:fixed;z-index:500;inset:0 0 auto;width:100%;max-width:none;min-height:5.15rem;margin:0;padding:.65rem max(1rem,calc((100vw - 78rem)/2));background:rgba(255,255,255,.97);border:0;border-bottom:1px solid rgba(8,122,63,.16);border-radius:0;box-shadow:0 .45rem 1.5rem rgba(3,47,35,.1);backdrop-filter:blur(18px) saturate(145%);transform:none}
+@media(max-width:42rem){:is(.home-page,.public-inner-page) .site-shell{padding-top:5.35rem}:is(.home-page,.public-inner-page) .site-header{top:0;width:100%;min-height:4.65rem;padding:.45rem .55rem;border-radius:0}}
