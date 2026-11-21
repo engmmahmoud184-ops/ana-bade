@@ -331,3 +331,16 @@ footer{color:var(--muted)}
 @media(max-width:64rem){.public-inner-page .main-nav{display:none}}
 @media(max-width:42rem){.public-inner-page .site-shell{width:min(100% - 1rem,78rem);padding-top:5.8rem}.public-inner-page .site-header{top:.45rem;width:calc(100% - .8rem);min-height:4.65rem;padding:.45rem}.public-inner-page .brand-mark{width:5.8rem;height:3rem}.public-inner-page .brand-name{display:none}.public-inner-page .header-actions{gap:.25rem}.public-inner-page .referral-login-link,.public-inner-page .header-cta,.public-inner-page .language-toggle{min-height:2.55rem;padding:.42rem .58rem;font-size:.7rem}.public-inner-page .header-cta{padding-inline:.65rem}.public-inner-page .desktop-label{display:none}.public-inner-page .mobile-label{display:inline}.public-inner-page .language-toggle{max-width:4.7rem}.public-inner-page .inner-page{padding-top:1.5rem}}
 @media(max-width:25rem){.public-inner-page .referral-login-link{display:none}.public-inner-page .brand-mark{width:5.3rem}.public-inner-page .language-toggle{padding-inline:.45rem}}
+
+/* v9.5 visual parity for the shared navigation. */
+:is(.home-page,.public-inner-page) .site-header{min-height:5.15rem;padding:.65rem .8rem;background:rgba(255,255,255,.93)}
+:is(.home-page,.public-inner-page) .brand-name{display:none}
+:is(.home-page,.public-inner-page) .brand-mark{width:8.2rem;height:3.7rem;background-color:#fff;background-size:contain;border:0;box-shadow:none}
+:is(.home-page,.public-inner-page) .main-nav{gap:.15rem;padding:.32rem .42rem;background:linear-gradient(135deg,#f1f9f3,#e8f4ec)}
+:is(.home-page,.public-inner-page) .main-nav a{gap:.4rem;min-width:6.2rem;justify-content:center;padding:.48rem .72rem;color:var(--brand-dark);font-size:.8rem}
+.nav-icon{display:grid;width:1.25rem;height:1.25rem;place-items:center;color:var(--brand);font:900 1.25rem/1 Arial,sans-serif}
+:is(.home-page,.public-inner-page) .referral-login-link{padding-inline:.9rem;font-weight:800}
+:is(.home-page,.public-inner-page) .header-cta{min-height:2.85rem;padding-inline:1rem;border-radius:.85rem}
+:is(.home-page,.public-inner-page) .language-toggle{background:#fff;border-color:var(--line)}
+@media(max-width:64rem){:is(.home-page,.public-inner-page) .brand-mark{width:7rem}}
+@media(max-width:42rem){:is(.home-page,.public-inner-page) .site-header{min-height:4.65rem;padding:.45rem}:is(.home-page,.public-inner-page) .brand-mark{width:5.8rem;height:3rem}:is(.home-page,.public-inner-page) .header-cta{min-height:2.55rem;padding-inline:.65rem}}
