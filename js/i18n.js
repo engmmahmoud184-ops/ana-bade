@@ -34,6 +34,18 @@
     "فتح الموقع":"Open location"
     ,"مراسلة واتساب":"Message on WhatsApp"
     ,"اتصل الآن":"Call now"
+    ,"الحضور الرقمي":"Digital presence"
+    ,"روابط البزنس ووسائل التواصل":"Business links and contact channels"
+    ,"كل الحقول التالية اختيارية. لن يظهر أي حقل تتركه فارغاً في صفحة البزنس.":"All fields below are optional. Empty fields will not appear on the business page."
+    ,"الموقع الإلكتروني":"Website"
+    ,"البريد الإلكتروني":"Email"
+    ,"فيسبوك":"Facebook"
+    ,"إنستغرام":"Instagram"
+    ,"يوتيوب":"YouTube"
+    ,"تيك توك":"TikTok"
+    ,"آخر تحديث: 22 تشرين الثاني 2026":"Last updated: November 22, 2026"
+    ,"عند تقديم طلب لإضافة خدمة أو إرسال بلاغ، قد نجمع الاسم ورقم الهاتف أو وسيلة التواصل والبريد الإلكتروني والعنوان والوصف وروابط الموقع الإلكتروني وGoogle Maps ومنصات التواصل الاجتماعي، إضافة إلى رمز المندوب ورقم الطلب ووصف التحويل وحالة المراجعة أو الدفع. لا نطلب كلمة مرور Whish أو PIN أو OTP أو معلومات مصرفية.":"When you submit a listing or report, we may collect the name, phone or contact details, email, address, description, website, Google Maps and social media links, along with referral and request details and review or payment status. We never ask for a Whish password, PIN, OTP, or banking information."
+    ,"تُحفظ البيانات عبر بنية سحابية محمية ومزوّدي خدمات تقنيين موثوقين. لا نبيع البيانات الشخصية. قد تظهر معلومات مقدم الخدمة المنشورة، مثل الاسم والهاتف والبريد والعنوان وروابط الموقع الإلكتروني وGoogle Maps ومنصات التواصل الاجتماعي، لجميع زوار الدليل بعد موافقة الإدارة. يُستخدم رمز المندوب وحالة الدفع داخلياً للإدارة والمحاسبة ولا يظهران للعامة.":"Data is stored using protected cloud infrastructure and trusted technology providers. We do not sell personal data. Approved provider details, including name, phone, email, address, website, Google Maps and social media links, may be visible to all directory visitors. Referral codes and payment status are used internally and are not public."
   });
 
   const patterns = [

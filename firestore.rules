@@ -14,6 +14,14 @@ service cloud.firestore {
     function referralCode() {
       return get(/databases/$(database)/documents/referralAccounts/$(request.auth.uid)).data.referralCode;
     }
+    function validOptionalUrl(value) {
+      return value is string && value.size() <= 500
+        && (value.size() == 0 || value.matches('^https?://[^\\s]+$'));
+    }
+    function validOptionalEmail(value) {
+      return value is string && value.size() <= 150
+        && (value.size() == 0 || value.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$'));
+    }
     match /regions/{id} { allow read: if resource.data.isActive == true || isAdmin(); allow write: if isAdmin(); }
     match /towns/{id} { allow read: if resource.data.isActive == true || isAdmin(); allow write: if isAdmin(); }
     match /categories/{id} { allow read: if resource.data.isActive == true || isAdmin(); allow write: if isAdmin(); }
@@ -32,15 +40,21 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
     match /providerRequests/{id} {
-      allow create: if request.resource.data.keys().hasOnly(['name','regionId','townId','categoryId','specialtyIds','phone','whatsapp','address','googleMapsUrl','referralCode','paymentReference','paymentDescription','feeUsd','listingYears','paymentStatus','description','imageUrl','imagePath','status','source','createdAt'])
-        && request.resource.data.keys().hasAll(['name','regionId','townId','categoryId','specialtyIds','phone','address','googleMapsUrl','referralCode','paymentReference','paymentDescription','feeUsd','listingYears','paymentStatus','status','source','createdAt'])
+      allow create: if request.resource.data.keys().hasOnly(['name','regionId','townId','categoryId','specialtyIds','phone','whatsapp','address','googleMapsUrl','websiteUrl','email','facebookUrl','instagramUrl','youtubeUrl','tiktokUrl','referralCode','paymentReference','paymentDescription','feeUsd','listingYears','paymentStatus','description','imageUrl','imagePath','status','source','createdAt'])
+        && request.resource.data.keys().hasAll(['name','regionId','townId','categoryId','specialtyIds','phone','whatsapp','address','googleMapsUrl','websiteUrl','email','facebookUrl','instagramUrl','youtubeUrl','tiktokUrl','referralCode','paymentReference','paymentDescription','feeUsd','listingYears','paymentStatus','description','imageUrl','imagePath','status','source','createdAt'])
         && request.resource.data.status == 'pending' && request.resource.data.source == 'website'
         && request.resource.data.createdAt == request.time
         && request.resource.data.name is string && request.resource.data.name.size() >= 2 && request.resource.data.name.size() <= 100
         && request.resource.data.phone is string && request.resource.data.phone.size() >= 5 && request.resource.data.phone.size() <= 30
         && request.resource.data.whatsapp is string && request.resource.data.whatsapp.size() <= 30
         && request.resource.data.address is string && request.resource.data.address.size() >= 3 && request.resource.data.address.size() <= 200
-        && request.resource.data.googleMapsUrl is string && request.resource.data.googleMapsUrl.size() <= 500
+        && validOptionalUrl(request.resource.data.googleMapsUrl)
+        && validOptionalUrl(request.resource.data.websiteUrl)
+        && validOptionalEmail(request.resource.data.email)
+        && validOptionalUrl(request.resource.data.facebookUrl)
+        && validOptionalUrl(request.resource.data.instagramUrl)
+        && validOptionalUrl(request.resource.data.youtubeUrl)
+        && validOptionalUrl(request.resource.data.tiktokUrl)
         && request.resource.data.referralCode is string && request.resource.data.referralCode.size() <= 40
         && request.resource.data.paymentReference is string && request.resource.data.paymentReference.size() >= 15 && request.resource.data.paymentReference.size() <= 120
         && request.resource.data.paymentDescription is string && request.resource.data.paymentDescription.size() >= 10 && request.resource.data.paymentDescription.size() <= 300

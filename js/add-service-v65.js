@@ -78,7 +78,7 @@ category.addEventListener("change", async () => {
 
 form.addEventListener("submit", async event => {
   event.preventDefault();
-  if (document.querySelector("#website").value) return;
+  if (document.querySelector("#company-site-trap").value) return;
   button.disabled = true; status.textContent = "جارٍ إرسال الطلب…";
   try {
     const identity = createPaymentIdentity({regionId:region.value,townId:town.value,specialtyId:specialty.value,providerName:document.querySelector("#name").value,phone:document.querySelector("#phone").value,regionLabel:region.options[region.selectedIndex]?.text,townLabel:town.options[town.selectedIndex]?.text,specialtyLabel:specialty.options[specialty.selectedIndex]?.text});
@@ -87,6 +87,9 @@ form.addEventListener("submit", async event => {
       categoryId:category.value, specialtyId:specialty.value,
       phone:document.querySelector("#phone").value, whatsapp:document.querySelector("#whatsapp").value,
       address:document.querySelector("#address").value, googleMapsUrl:document.querySelector("#google-maps-url").value,
+      websiteUrl:document.querySelector("#business-website").value, email:document.querySelector("#business-email").value,
+      facebookUrl:document.querySelector("#facebook-url").value, instagramUrl:document.querySelector("#instagram-url").value,
+      youtubeUrl:document.querySelector("#youtube-url").value, tiktokUrl:document.querySelector("#tiktok-url").value,
       referralCode:document.querySelector("#referral-code").value, paymentReference:identity.paymentReference, paymentDescription:identity.paymentDescription,
       description:document.querySelector("#description").value
     }, imageInput.files[0] || null);

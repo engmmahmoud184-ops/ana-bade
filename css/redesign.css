@@ -146,6 +146,7 @@ label{color:var(--ink)}
 .image-upload>input[type="file"]{padding:.45rem;background:var(--surface-subtle);border:1px dashed var(--line-strong);border-radius:var(--radius-md)}
 .image-upload>input[type="file"]::file-selector-button{margin-inline-end:.75rem;padding:.55rem .8rem;color:var(--brand-dark);background:var(--soft);border:1px solid #c6ddd0;border-radius:var(--radius-sm);font:inherit;font-weight:800;cursor:pointer}
 .fee-summary{color:var(--brand-dark);background:var(--soft);border-color:#c7dfd0}
+.form-section-heading{margin:.55rem 0 -.1rem;padding:1rem 0 .15rem;border-top:1px solid var(--line)}.form-section-heading span{color:var(--brand);font-size:.7rem;font-weight:900}.form-section-heading h2{margin:.2rem 0 .3rem;font-size:1.15rem}.form-section-heading p{margin:0;color:var(--muted);font-size:.78rem;line-height:1.6}
 
 /* Stronger rhythm and hierarchy across directory and account pages. */
 .inner-page{padding-block:clamp(2rem,5vw,4rem)}
