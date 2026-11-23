@@ -2,6 +2,7 @@ import { getActiveRegions } from "./services/regions-service.js";
 import { getAllActiveTowns } from "./services/towns-service.js";
 import { getActiveCategories } from "./services/categories-service.js";
 import { getAllActiveSpecialties } from "./services/specialties-service.js";
+import { getAllActiveProviders } from "./services/providers-service.js?v=9.9.0";
 import { normalizeSearch } from "./ui.js";
 
 const form = document.querySelector("#smart-search-form");
@@ -114,6 +115,7 @@ function matchScore(item, query) {
   const haystack = item.searchText;
   if (haystack === needle) return 120;
   if (haystack.startsWith(needle)) return 100;
+  if (item.type === "provided-item" && needle.includes(haystack)) return 92;
   if (haystack.includes(needle)) return 82;
   const tokens = needle.split(" ");
   if (tokens.every(token => haystack.includes(token))) return 65;
@@ -131,8 +133,8 @@ function ranked(items, query, limit = 8) {
 }
 
 function serviceTypeLabel(type) {
-  const ar = { category:"فئة عامة", specialty:"اختصاص دقيق" };
-  const en = { category:"General category", specialty:"Precise specialty" };
+  const ar = { category:"فئة عامة", specialty:"اختصاص دقيق", "provided-item":"منتج أو خدمة" };
+  const en = { category:"General category", specialty:"Precise specialty", "provided-item":"Product or service" };
   return (language() === "en" ? en : ar)[type];
 }
 
@@ -167,7 +169,7 @@ function renderSuggestions(input, list, items, kind) {
     const icon = document.createElement("span");
     icon.className = "suggestion-icon";
     icon.setAttribute("aria-hidden", "true");
-    icon.textContent = kind === "service" ? ({ category:"⌘", specialty:"•" }[item.type]) : (item.type === "town" ? "⌖" : "◉");
+    icon.textContent = kind === "service" ? ({ category:"⌘", specialty:"•", "provided-item":"◇" }[item.type]) : (item.type === "town" ? "⌖" : "◉");
     const copy = document.createElement("span");
     const title = document.createElement("strong");
     const meta = document.createElement("small");
@@ -196,7 +198,7 @@ function choose(input, list, item, kind) {
 function suggestionsFor(kind, query) {
   let items = kind === "service" ? serviceItems : locationItems;
   if (kind === "service" && searchable(query)) {
-    const hasStrongLeaf = items.some(item => item.type === "specialty" && matchScore(item, query) >= 65);
+    const hasStrongLeaf = items.some(item => (item.type === "specialty" || item.type === "provided-item") && matchScore(item, query) >= 65);
     if (hasStrongLeaf) items = items.filter(item => item.type !== "category");
   }
   return ranked(items, query);
@@ -248,23 +250,61 @@ function resolveTyped(kind) {
   const firstScore = matchScore(matches[0], input.value);
   const secondScore = matches[1] ? matchScore(matches[1], input.value) : 0;
   if (kind === "service" && firstScore === secondScore && matches[0].type === "specialty" && matches[1]?.type === "specialty") return null;
+  if (kind === "service" && firstScore === secondScore && matches[0].type === "provided-item" && matches[1]?.type === "provided-item" && matches[0].specialtyId !== matches[1].specialtyId) return null;
   return firstScore >= 65 ? matches[0] : null;
 }
 
 function destination(service, location) {
-  const specialtyPart = service.type === "specialty" ? `&specialty=${encodeURIComponent(service.id)}` : "";
-  if (location.type === "region") return `towns.html?region=${encodeURIComponent(location.id)}&category=${encodeURIComponent(service.categoryId)}${specialtyPart}`;
-  return `providers.html?town=${encodeURIComponent(location.id)}&category=${encodeURIComponent(service.categoryId)}${specialtyPart}`;
+  const resolvedSpecialtyId = service.type === "provided-item" ? service.specialtyId : (service.type === "specialty" ? service.id : "");
+  const specialtyPart = resolvedSpecialtyId ? `&specialty=${encodeURIComponent(resolvedSpecialtyId)}` : "";
+  const termPart = service.type === "provided-item" ? `&term=${encodeURIComponent(service.searchTerm)}` : "";
+  if (location.type === "region") return `towns.html?region=${encodeURIComponent(location.id)}&category=${encodeURIComponent(service.categoryId)}${specialtyPart}${termPart}`;
+  return `providers.html?town=${encodeURIComponent(location.id)}&category=${encodeURIComponent(service.categoryId)}${specialtyPart}${termPart}`;
+}
+
+function providedItemSearchItems(providers, specialtyById) {
+  const grouped = new Map();
+  providers.forEach(provider => {
+    if (!Array.isArray(provider.providedItems) || !Array.isArray(provider.specialtyIds)) return;
+    provider.providedItems.forEach(value => {
+      const label = String(value || "").trim().replace(/\s+/g, " ");
+      const normalized = searchable(label);
+      if (!normalized || label.length > 40) return;
+      provider.specialtyIds.forEach(specialtyId => {
+        const specialty = specialtyById.get(specialtyId);
+        if (!specialty) return;
+        const key = `${normalized}::${specialtyId}`;
+        const current = grouped.get(key) || { label, normalized, specialty, categoryId:provider.categoryId || specialty.categoryId, count:0 };
+        current.count += 1;
+        grouped.set(key, current);
+      });
+    });
+  });
+  return [...grouped.values()].map(item => ({
+    id:`provided-${item.specialty.id}-${item.normalized}`,
+    name:item.label,
+    type:"provided-item",
+    typeRank:-1,
+    defaultRank:0,
+    categoryId:item.categoryId,
+    specialtyId:item.specialty.id,
+    searchTerm:item.label,
+    providerCount:item.count,
+    meta:`${itemName(item.specialty)} · ${item.count} ${language() === "en" ? (item.count === 1 ? "provider" : "providers") : (item.count === 1 ? "مقدّم" : "مقدّمين")}`,
+    searchText:item.normalized
+  }));
 }
 
 async function loadSearchData() {
   try {
-    const [regions, towns, categories, specialties] = await Promise.all([
-      getActiveRegions(), getAllActiveTowns(), getActiveCategories(), getAllActiveSpecialties()
+    const [regions, towns, categories, specialties, providers] = await Promise.all([
+      getActiveRegions(), getAllActiveTowns(), getActiveCategories(), getAllActiveSpecialties(), getAllActiveProviders()
     ]);
     regionById = new Map(regions.map(item => [item.id, item]));
     categoryById = new Map(categories.map(item => [item.id, item]));
+    const specialtyById = new Map(specialties.map(item => [item.id, item]));
     serviceItems = [
+      ...providedItemSearchItems(providers, specialtyById),
       ...categories.map((item, index) => ({ ...item, type:"category", typeRank:1, defaultRank:40 - index, categoryId:item.id, raw:item, searchText:searchable(`${item.nameAr} ${item.nameEn || ""} ${categoryAliases[item.id] || ""}`) })),
       ...specialties.map(item => ({ ...item, type:"specialty", typeRank:0, defaultRank:25, raw:item, meta:itemName(categoryById.get(item.categoryId) || {}), searchText:searchable(`${item.nameAr} ${item.nameEn || ""} ${specialtyAliases[item.id] || ""}`) }))
     ];

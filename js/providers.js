@@ -1,17 +1,54 @@
 import { getTownById } from "./services/towns-service.js";
 import { getCategoryById } from "./services/categories-service.js";
 import { getSpecialtyById } from "./services/specialties-service.js";
-import { getActiveProviders } from "./services/providers-service.js";
+import { getActiveProviders } from "./services/providers-service.js?v=9.9.0";
 import { phoneHref, whatsappHref } from "./contact-links.js";
-import { showNotice } from "./ui.js";
+import { normalizeSearch, showNotice } from "./ui.js";
 
 const params = new URLSearchParams(location.search);
 const townId = params.get("town");
 const categoryId = params.get("category");
 const specialtyId = params.get("specialty");
+const searchTerm = String(params.get("term") || "").trim().slice(0, 40);
 const container = document.querySelector("#providers");
 const localizedName = item => window.AnaBadeI18n?.name(item) || item?.nameAr || item?.nameEn || "";
 const isEnglish = () => window.AnaBadeI18n?.language() === "en";
+
+function searchableTerm(value) {
+  return normalizeSearch(String(value || ""))
+    .replace(/[^a-z0-9\u0600-\u06ff]+/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function providerTermScore(provider, term) {
+  const needle = searchableTerm(term);
+  if (!needle || !Array.isArray(provider.providedItems)) return 0;
+  return provider.providedItems.reduce((best, value) => {
+    const candidate = searchableTerm(value);
+    if (!candidate) return best;
+    if (candidate === needle) return Math.max(best, 3);
+    if (candidate.includes(needle) || needle.includes(candidate)) return Math.max(best, 2);
+    const tokens = needle.split(" ").filter(Boolean);
+    if (tokens.length && tokens.every(token => candidate.includes(token))) return Math.max(best, 1);
+    return best;
+  }, 0);
+}
+
+function groupHeading(title, count, description, className = "") {
+  const heading = document.createElement("div");
+  heading.className = `providers-group-heading ${className}`.trim();
+  const copy = document.createElement("div");
+  const name = document.createElement("h2");
+  const detail = document.createElement("p");
+  const badge = document.createElement("b");
+  name.textContent = title;
+  detail.textContent = description;
+  badge.textContent = String(count);
+  copy.append(name, detail);
+  heading.append(copy, badge);
+  return heading;
+}
 
 function actionLink(label, href, className, icon, external = false) {
   if (!href) return "";
@@ -51,6 +88,9 @@ if (!townId || !categoryId) {
     if (!town || !category || (specialtyId && !specialty)) throw new Error("Selection not found");
     const normalizedLegacyKey = String(town.legacyKey || "").toLowerCase().replace(/[^a-z0-9]/g, "");
     const providers = await getActiveProviders({ townIds: [townId, town.legacyKey, normalizedLegacyKey], categoryId, specialtyId });
+    const rankedProviders = searchTerm ? providers.map(provider => ({ provider, score:providerTermScore(provider, searchTerm) }))
+      .sort((a, b) => b.score - a.score || (a.provider.name || "").localeCompare(b.provider.name || "", "ar", { sensitivity:"base" })) : providers.map(provider => ({ provider, score:0 }));
+    const matchingCount = rankedProviders.filter(entry => entry.score > 0).length;
 
     const townsUrl = `towns.html?region=${encodeURIComponent(town.regionId)}&category=${encodeURIComponent(categoryId)}`;
     const categoriesUrl = `categories.html?town=${encodeURIComponent(townId)}`;
@@ -61,7 +101,11 @@ if (!townId || !categoryId) {
     document.querySelector("#specialties-back-link")?.setAttribute("href", specialtiesUrl);
     const serviceLabel = localizedName(specialty || category), townName = localizedName(town);
     document.querySelector("#providers-title").textContent = isEnglish() ? `${serviceLabel} in ${townName}` : `${serviceLabel} في ${townName}`;
-    document.querySelector("#providers-subtitle").textContent = isEnglish() ? "Choose a provider and contact them directly." : "اختار مقدم الخدمة وتواصل معه مباشرة.";
+    document.querySelector("#providers-subtitle").textContent = searchTerm
+      ? (matchingCount
+        ? (isEnglish() ? `Providers offering “${searchTerm}” appear first, followed by other options in the specialty.` : `الأسماء التي ذكرت «${searchTerm}» تظهر أولاً، وبعدها بقية خيارات الاختصاص.`)
+        : (isEnglish() ? `No provider confirmed “${searchTerm}” here yet. Showing other options in the specialty.` : `لا يوجد مقدم خدمة أكّد «${searchTerm}» هنا حالياً، لذلك نعرض بقية خيارات الاختصاص.`))
+      : (isEnglish() ? "Choose a provider and contact them directly." : "اختار مقدم الخدمة وتواصل معه مباشرة.");
     document.querySelector("#providers-count").textContent = `${providers.length.toLocaleString("en-US")} ${isEnglish() ? (providers.length === 1 ? "option available" : "options available") : (providers.length === 1 ? "خيار متاح" : "خيارات متاحة")}`;
     container.innerHTML = "";
     container.removeAttribute("aria-busy");
@@ -69,9 +113,16 @@ if (!townId || !categoryId) {
     if (!providers.length) {
       showNotice(container, "ما لقينا مقدّمي خدمة ضمن هذه الفئة حالياً.", "ستظهر النتائج تلقائياً عند إضافة مقدّمين فعّالين ضمن البلدة والفئة.");
     } else {
-      providers.forEach(provider => {
+      rankedProviders.forEach(({ provider, score }, index) => {
+        if (searchTerm && index === 0 && matchingCount > 0) {
+          container.append(groupHeading(isEnglish() ? `Best matches for “${searchTerm}”` : `الأكثر مطابقة لـ «${searchTerm}»`, matchingCount, isEnglish() ? "These providers listed this product or service." : "هذه الأسماء أضافت هذا المنتج أو الخدمة ضمن ما تقدّمه.", "is-matched"));
+        }
+        if (searchTerm && index === matchingCount) {
+          const otherCount = providers.length - matchingCount;
+          if (otherCount > 0) container.append(groupHeading(isEnglish() ? "Other options in this specialty" : "خيارات أخرى ضمن الاختصاص", otherCount, isEnglish() ? "They may also be suitable, but have not listed this item." : "قد تكون مناسبة أيضاً، لكنها لم تضف هذا البند ضمن معلوماتها."));
+        }
         const card = document.createElement("article");
-        card.className = "provider-card";
+        card.className = `provider-card${score > 0 ? " provider-card-matched" : ""}`;
         const specialtyPart = specialtyId ? `&specialty=${encodeURIComponent(specialtyId)}` : "";
         const profileUrl = `provider.html?id=${encodeURIComponent(provider.id)}&town=${encodeURIComponent(townId)}&category=${encodeURIComponent(categoryId)}${specialtyPart}`;
         const call = phoneHref(provider.phone);

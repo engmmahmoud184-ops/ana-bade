@@ -1,12 +1,13 @@
 import { getRegionById } from "./services/regions-service.js";
 import { getActiveTownsByRegion } from "./services/towns-service.js";
 import { normalizeSearch, showNotice } from "./ui.js";
-import { getAllActiveProviders, townIdVariants } from "./services/providers-service.js";
+import { getAllActiveProviders, townIdVariants } from "./services/providers-service.js?v=9.9.0";
 
 const params = new URLSearchParams(location.search);
 const regionId = params.get("region");
 const categoryId = params.get("category");
 const specialtyId = params.get("specialty");
+const searchTerm = params.get("term");
 const container = document.querySelector("#towns");
 const input = document.querySelector("#town-search");
 let towns = [];
@@ -26,7 +27,7 @@ function render(filter = "") {
   visible.forEach(town => {
     const link = document.createElement("a");
     link.className = "town-row";
-    link.href = categoryId ? `providers.html?town=${encodeURIComponent(town.id)}&category=${encodeURIComponent(categoryId)}${specialtyId ? `&specialty=${encodeURIComponent(specialtyId)}` : ""}` : `categories.html?town=${encodeURIComponent(town.id)}`;
+    link.href = categoryId ? `providers.html?town=${encodeURIComponent(town.id)}&category=${encodeURIComponent(categoryId)}${specialtyId ? `&specialty=${encodeURIComponent(specialtyId)}` : ""}${searchTerm ? `&term=${encodeURIComponent(searchTerm)}` : ""}` : `categories.html?town=${encodeURIComponent(town.id)}`;
     link.innerHTML = `<span><strong></strong><small lang="en" dir="ltr"></small><b class="provider-count-badge"></b></span><span class="arrow" aria-hidden="true">←</span>`;
     link.querySelector("strong").textContent = localizedName(town);
     link.querySelector("small").textContent = window.AnaBadeI18n?.language() === "en" ? (town.nameAr || "") : (town.nameEn || "");

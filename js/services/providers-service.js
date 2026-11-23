@@ -1,6 +1,8 @@
 import { collection, doc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 import { db } from "../firebase.js";
 
+let allActiveProvidersPromise;
+
 export async function getActiveProviders({ townIds, categoryId, specialtyId }) {
   const uniqueTownIds = [...new Set(townIds.filter(Boolean))];
   const snapshots = await Promise.all(uniqueTownIds.map(townId => getDocs(query(collection(db, "providers"), where("townId", "==", townId), where("isActive", "==", true)))));
@@ -12,8 +14,15 @@ export async function getActiveProviders({ townIds, categoryId, specialtyId }) {
 }
 
 export async function getAllActiveProviders() {
-  const snapshot = await getDocs(query(collection(db, "providers"), where("isActive", "==", true)));
-  return snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+  if (!allActiveProvidersPromise) {
+    allActiveProvidersPromise = getDocs(query(collection(db, "providers"), where("isActive", "==", true)))
+      .then(snapshot => snapshot.docs.map(item => ({ id: item.id, ...item.data() })))
+      .catch(error => {
+        allActiveProvidersPromise = undefined;
+        throw error;
+      });
+  }
+  return allActiveProvidersPromise;
 }
 
 export function townIdVariants(town) {

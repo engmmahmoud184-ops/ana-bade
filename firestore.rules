@@ -22,6 +22,22 @@ service cloud.firestore {
       return value is string && value.size() <= 150
         && (value.size() == 0 || value.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$'));
     }
+    function validProvidedItem(value) {
+      return value is string && value.size() >= 2 && value.size() <= 40;
+    }
+    function validProvidedItems(items) {
+      return items is list && items.size() <= 10
+        && (items.size() < 1 || validProvidedItem(items[0]))
+        && (items.size() < 2 || validProvidedItem(items[1]))
+        && (items.size() < 3 || validProvidedItem(items[2]))
+        && (items.size() < 4 || validProvidedItem(items[3]))
+        && (items.size() < 5 || validProvidedItem(items[4]))
+        && (items.size() < 6 || validProvidedItem(items[5]))
+        && (items.size() < 7 || validProvidedItem(items[6]))
+        && (items.size() < 8 || validProvidedItem(items[7]))
+        && (items.size() < 9 || validProvidedItem(items[8]))
+        && (items.size() < 10 || validProvidedItem(items[9]));
+    }
     match /regions/{id} { allow read: if resource.data.isActive == true || isAdmin(); allow write: if isAdmin(); }
     match /towns/{id} { allow read: if resource.data.isActive == true || isAdmin(); allow write: if isAdmin(); }
     match /categories/{id} { allow read: if resource.data.isActive == true || isAdmin(); allow write: if isAdmin(); }
@@ -40,7 +56,7 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
     match /providerRequests/{id} {
-      allow create: if request.resource.data.keys().hasOnly(['name','regionId','townId','categoryId','specialtyIds','phone','whatsapp','address','googleMapsUrl','websiteUrl','email','facebookUrl','instagramUrl','youtubeUrl','tiktokUrl','referralCode','paymentReference','paymentDescription','feeUsd','listingYears','paymentStatus','description','imageUrl','imagePath','status','source','createdAt'])
+      allow create: if request.resource.data.keys().hasOnly(['name','regionId','townId','categoryId','specialtyIds','phone','whatsapp','address','googleMapsUrl','websiteUrl','email','facebookUrl','instagramUrl','youtubeUrl','tiktokUrl','referralCode','paymentReference','paymentDescription','feeUsd','listingYears','paymentStatus','description','providedItems','imageUrl','imagePath','status','source','createdAt'])
         && request.resource.data.keys().hasAll(['name','regionId','townId','categoryId','specialtyIds','phone','whatsapp','address','googleMapsUrl','websiteUrl','email','facebookUrl','instagramUrl','youtubeUrl','tiktokUrl','referralCode','paymentReference','paymentDescription','feeUsd','listingYears','paymentStatus','description','imageUrl','imagePath','status','source','createdAt'])
         && request.resource.data.status == 'pending' && request.resource.data.source == 'website'
         && request.resource.data.createdAt == request.time
@@ -60,6 +76,7 @@ service cloud.firestore {
         && request.resource.data.paymentDescription is string && request.resource.data.paymentDescription.size() >= 10 && request.resource.data.paymentDescription.size() <= 300
         && request.resource.data.feeUsd == 10 && request.resource.data.listingYears == 3 && request.resource.data.paymentStatus == 'awaiting_review'
         && request.resource.data.description is string && request.resource.data.description.size() <= 600
+        && (!request.resource.data.keys().hasAny(['providedItems']) || validProvidedItems(request.resource.data.providedItems))
         && request.resource.data.imageUrl is string && request.resource.data.imageUrl.size() <= 1500
         && request.resource.data.imagePath is string && request.resource.data.imagePath.size() <= 250
         && request.resource.data.specialtyIds is list && request.resource.data.specialtyIds.size() == 1;

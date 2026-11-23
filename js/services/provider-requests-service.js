@@ -23,6 +23,7 @@ export async function submitProviderRequest(data, imageFile = null) {
     youtubeUrl: data.youtubeUrl.trim(), tiktokUrl: data.tiktokUrl.trim(),
     referralCode: data.referralCode.trim().toUpperCase(), paymentReference:data.paymentReference, paymentDescription:data.paymentDescription,
     feeUsd: 10, listingYears: 3, paymentStatus: "awaiting_review", description: data.description.trim(),
+    providedItems: Array.isArray(data.providedItems) ? data.providedItems.map(item => item.trim()).filter(Boolean).slice(0, 10) : [],
     imageUrl, imagePath,
     status: "pending", source: "website", createdAt: serverTimestamp()
   });
@@ -60,7 +61,7 @@ export async function approveProviderRequest(requestId, adminUid, billingMode = 
       facebookUrl:data.facebookUrl || "", instagramUrl:data.instagramUrl || "",
       youtubeUrl:data.youtubeUrl || "", tiktokUrl:data.tiktokUrl || "",
       imageUrl:data.imageUrl || "", imagePath:data.imagePath || "",
-      description:data.description, isActive:true, isVerified:false, billingMode,
+      description:data.description, providedItems:Array.isArray(data.providedItems) ? data.providedItems : [], isActive:true, isVerified:false, billingMode,
       feeUsd:billingMode === "paid" ? 10 : 0, amountReceivedUsd:receivedAmount,
       listingStartAt:serverTimestamp(), listingExpiresAt:Timestamp.fromDate(expiresAt),
       publishedFromRequestId:requestId, createdAt:serverTimestamp()

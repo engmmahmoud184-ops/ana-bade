@@ -1,8 +1,8 @@
 import { db } from "./firebase.js";
-import { collection, doc, getDocs, query, runTransaction, serverTimestamp, where } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+import { doc, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 import { getAllActiveTowns } from "./services/towns-service.js";
 import { getAllActiveSpecialties } from "./services/specialties-service.js";
-import { townIdVariants } from "./services/providers-service.js";
+import { getAllActiveProviders, townIdVariants } from "./services/providers-service.js?v=9.9.0";
 
 const providersStat = document.querySelector("#providers-stat");
 const visitsStat = document.querySelector("#visits-stat");
@@ -16,10 +16,8 @@ function westernNumber(value) {
 }
 
 async function loadProviderCount() {
-  const activeProviders = query(collection(db, "providers"), where("isActive", "==", true));
-  const snapshot = await getDocs(activeProviders);
-  const providers = snapshot.docs.map(item => ({ id:item.id, ...item.data() }));
-  providersStat.textContent = westernNumber(snapshot.size);
+  const providers = await getAllActiveProviders();
+  providersStat.textContent = westernNumber(providers.length);
   await Promise.all([loadRegionCounts(providers), loadPopularExamples(providers)]);
 }
 
